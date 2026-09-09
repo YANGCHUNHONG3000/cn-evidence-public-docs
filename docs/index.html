@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CN Evidence — China Supplier Due Diligence API | x402, No API Key</title>
+  <meta name="description" content="China supplier verification for AI agents: company identity, USCC, government procurement awards, regulatory history and provenance. Basic $0.002, Full $0.01 USDC via x402. Configured datasets only; no API key.">
+  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">
+  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">
+  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><nav aria-label="Main navigation"><a class="brand" href="./">CN EVIDENCE</a><div class="nav-links"><a href="#tools">Tools &amp; pricing</a><a href="#coverage">Coverage</a><a href="#integrate">Integrate</a><a href="zh/" lang="zh-CN">中文</a></div></nav></header>
+<main id="main">
+  <div class="hero">
+    <p class="eyebrow">China supplier evidence · Built for agents</p>
+    <h1>Verify the company.<br>Keep the evidence.</h1>
+    <p class="lead">China supplier due diligence through a machine-readable API: company identity and USCC, government procurement awards, regulatory history and source provenance.</p>
+    <p>No signup. No API key. Pay per call with <strong>x402 · Base USDC</strong>.</p>
+    <div class="actions"><a class="button" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Read OpenAPI</a><a class="button secondary" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">Inspect a free Full example</a></div>
+    <p class="scope"><strong>Know the scope.</strong> Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness. Awards are not proof of contract performance.</p>
+  </div>
+  <section id="tools" aria-labelledby="tools-title">
+    <h2 id="tools-title">Resolve first. Buy the detail you need.</h2>
+    <div class="cards">
+      <article class="card"><h3>Resolve</h3><p class="price">Free</p><p>Confirm a Chinese legal company name and inspect possible same-name candidates before purchasing evidence.</p><p class="method">GET <code>/free/cn/entity/resolve</code></p><p><code>resolve_china_company</code></p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json">Resolver example</a></article>
+      <article class="card"><h3>Basic</h3><p class="price">$0.002 <span>USDC / call</span></p><p>Low-cost supplier screening: identity, procurement and regulatory summaries, linkage and source coverage. No detailed evidence rows.</p><p class="method">GET <code>/x402/cn/supplier/evidence/basic</code></p><p><code>get_china_supplier_evidence_basic</code></p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json">Basic example</a></article>
+      <article class="card full"><h3>Full</h3><p class="price">$0.01 <span>USDC / call</span></p><p>Detailed procurement and regulatory evidence rows with source provenance, where available. Control how many rows you receive.</p><p class="method">POST <code>/x402/cn/supplier/evidence</code></p><p><code>get_china_supplier_evidence_full</code></p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">Full example</a></article>
+    </div>
+    <p class="note">If multiple entities match, do not guess. Obtain the intended company's exact 18-character USCC, then use Basic or Full. The free resolver accepts <code>company</code>, not a USCC input.</p>
+  </section>
+  <section id="coverage" aria-labelledby="coverage-title">
+    <h2 id="coverage-title">Regional sources. Explicit limits.</h2>
+    <p>The current published contract describes Shenzhen company/USCC, abnormal-operation and administrative-penalty datasets, plus Beijing government procurement award data. Preserve each response's <code>dataset_coverage</code>, <code>linkage</code> and <code>coverage_notes</code>.</p>
+    <ul><li><strong>Company identity:</strong> legal-name and USCC evidence within configured source coverage; not a complete nationwide company register.</li><li><strong>Government procurement:</strong> contract-award and bid-award records, not verified delivery, acceptance or contract performance.</li><li><strong>Regulatory evidence:</strong> historical records and available administrative penalties. Zero confirmed records is not nationwide clearance.</li><li><strong>Ambiguity-safe linkage:</strong> same-name records must not automatically become a company's penalties or procurement history.</li><li><strong>Time matters:</strong> historical abnormal-operation records do not establish current abnormal status. Preserve <code>UNKNOWN</code>; a query timestamp does not refresh every upstream record.</li></ul>
+  </section>
+  <section id="evidence" aria-labelledby="evidence-title">
+    <h2 id="evidence-title">What Full adds to Basic</h2>
+    <p>Both tiers expose screening facts and dataset scope. Full can also return the rows behind those facts. Each Evidence row includes <code>type</code>, <code>source</code>, <code>dataset</code>, <code>checked_at</code>, and at least one valid <code>dataset_id</code> or <code>content_id</code>. Preserve announcement identifiers, raw record fields and source-file locators when present.</p>
+    <p>The <a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">free Full sample</a> returns two representative rows out of six with <code>evidence_limit=2</code> and <code>truncated=true</code>: one procurement award and one regulatory-history record. The latter's <code>NOT_ENTERED</code> disposition is not a current abnormal-listing or penalty claim.</p>
+    <p class="scope">All linked samples are static, marked <code>example:true</code> and <code>not_live_query:true</code>. They explain the contract; they are not current due-diligence results.</p>
+  </section>
+  <section id="integrate" aria-labelledby="integrate-title">
+    <h2 id="integrate-title">Start with an unsigned request</h2>
+    <p>Canonical origin: <a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev">cn-evidence-agent402-public.mikeyang7789.workers.dev</a></p>
+    <pre><code>curl -i -X POST \
+  'https://cn-evidence-agent402-public.mikeyang7789.workers.dev/x402/cn/supplier/evidence' \
+  -H 'Content-Type: application/json' \
+  --data '{"uscc":"9144030033518485XF","include_evidence":true,"evidence_limit":2}'</code></pre>
+    <p>This ordinary curl request supplies no payment signature and cannot pay. A valid unsigned request receives HTTP 402. A payment-capable client must separately validate the challenge and obtain spending authorization before signing and retrying.</p>
+    <div class="table-wrap"><table><caption>Business-call inputs</caption><thead><tr><th scope="col">Input</th><th scope="col">Rule</th></tr></thead><tbody><tr><th scope="row"><code>company</code></th><td>Chinese company name, 2–200 characters. Required for the free resolver.</td></tr><tr><th scope="row"><code>uscc</code></th><td>18 uppercase letters/digits. Basic and Full require at least <code>company</code> or <code>uscc</code>.</td></tr><tr><th scope="row"><code>include_evidence</code></th><td>Full only; boolean, default true.</td></tr><tr><th scope="row"><code>evidence_limit</code></th><td>Full only; integer 0–100, default 100.</td></tr></tbody></table></div>
+    <p class="note">Canonical payments: x402 v2, exact, Base <code>eip155:8453</code>, USDC, EIP-3009. Basic / Full: <code>2000</code> / <code>10000</code> atomic units. A compatible funded wallet is needed for paid calls. Check the live challenge, not just this page.</p>
+    <ul class="links"><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Live OpenAPI schema</a></li><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/agent.json">Agent manifest</a></li><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/x402">x402 manifest</a></li><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/llms.txt">Agent usage guide</a></li><li><a href="https://agent402.tools/base?all=1">Agent402 marketplace</a></li><li><a href="https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json">Separate MPP + x402 adapter contract</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">Public documentation on GitHub</a></li><li><a href="llms.txt">This documentation in machine-readable text</a></li></ul>
+    <p class="warning"><strong>Remote MCP preview:</strong> <a href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">public endpoint</a>. On 2026-09-09 its health check responded, but a public <code>initialize</code> handshake returned HTTP 421 (<code>Invalid Host header</code>). Use the canonical HTTP API until public initialization and <code>tools/list</code> pass. No Glama or official MCP Registry publication is claimed.</p>
+  </section>
+</main>
+<footer><p>CN Evidence · Public documentation and unsigned examples only. No private implementation or database is published here.</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">Documentation license</a> · <a href="zh/" lang="zh-CN">中文</a> · Read the live API contract before use.</p></footer>
+</body>
+</html>

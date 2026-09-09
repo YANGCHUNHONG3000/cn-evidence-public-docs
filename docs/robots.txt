@@ -1,0 +1,8 @@
+# GitHub project Pages serves this file below the repository path.
+# Robots exclusion rules are read only at the host root /robots.txt.
+# This file is deployment-ready for a dedicated site origin; on project Pages,
+# submit sitemap.xml directly through an authorized webmaster account.
+User-agent: *
+Allow: /
+
+Sitemap: https://yangchunhong3000.github.io/cn-evidence-public-docs/sitemap.xml

@@ -1,0 +1,37 @@
+# CN Evidence
+
+> China supplier due diligence and Chinese vendor verification API for AI agents. 中国供应商核验：企业身份、统一社会信用代码、政府采购中标、监管历史与证据来源。No signup or API key. Paid calls require a compatible funded wallet.
+
+Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness. Published coverage describes Shenzhen company/USCC, abnormal-operation and penalty datasets and Beijing procurement awards. No record found is not nationwide absence. Awards are not verified contract performance. Historical abnormal-operation records are not current abnormal status. Preserve ambiguous linkage and UNKNOWN.
+
+## Use the right tool
+
+- resolve_china_company: GET /free/cn/entity/resolve, free, company required (2-200 characters). Inspect candidates; do not guess. Obtain the intended USCC before using paid tools if ambiguous.
+- get_china_supplier_evidence_basic: GET /x402/cn/supplier/evidence/basic, $0.002 USDC. Supply company or uscc. Summaries, linkage and source coverage; no detailed evidence rows.
+- get_china_supplier_evidence_full: POST /x402/cn/supplier/evidence, $0.01 USDC. Supply company or uscc. include_evidence=true by default, evidence_limit integer 0-100, default 100. Full may return detailed evidence rows with type/source/dataset/checked_at and at least one valid dataset_id or content_id. Preserve record-specific locators. Check evidence_meta for truncation.
+
+USCC must be 18 uppercase letters/digits. Canonical protocol: x402 v2 exact, Base eip155:8453, USDC, EIP-3009. Basic amount 2000; Full amount 10000. Asset 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913; payTo 0x3aEDB825B264e82676A42B1a6d12EA253c0Ce852. Validate live challenges and spending authorization before signing. Unsigned curl requests do not pay.
+
+## Authoritative public API links
+
+- [API origin](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/)
+- [OpenAPI](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json)
+- [Agent manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/agent.json)
+- [x402 manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/x402)
+- [Resolver example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json)
+- [Basic example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json)
+- [Full example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json)
+- [MPP adapter contract](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
+- [Remote MCP preview](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp)
+- [Public documentation repository](https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs)
+
+All examples are static and explicitly not_live_query; do not cite them as fresh supplier facts. Full's regulatory sample NOT_ENTERED is not current abnormal listing or a penalty.
+
+Remote MCP status as checked 2026-09-09: health responds, but public initialize returned 421 Invalid Host header. Use canonical HTTP API pending successful public handshake and tools/list. No Glama or official MCP Registry publication is claimed here. The MPP adapter separately advertises MPP and x402; inspect its own live schema.
+
+## HTML documentation (prepared for GitHub Pages)
+
+- [English](https://yangchunhong3000.github.io/cn-evidence-public-docs/)
+- [中文](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/)
+
+Repository publication alone does not establish that GitHub Pages is enabled or that search engines indexed these URLs.
