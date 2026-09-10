@@ -65,14 +65,20 @@ curl -i -X POST \
 - [Agent manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/agent.json)／[x402 manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/x402)／[使用指南](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/llms.txt)
 - [Agent402 公共目录](https://agent402.tools/base?all=1)
 - [MPP 适配入口](https://cn-evidence-mpp-public.mikeyang7789.workers.dev)／[MPP OpenAPI](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
-- [Remote MCP 预览入口](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp)
+- [Remote MCP 公网端点](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp) — **LIVE / public MCP SDK verified**；Streamable HTTP，3 tools。
+- [Glama Connector](https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence) — **LIVE / Healthy / 3 tools**。
+- [Official MCP Registry 记录](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence) — **active**，版本 **0.1.0**；server name：`dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence`。
+- [MPPScan 公开页面](https://mppscan.com/server/10e814be2d90b2566a8df027a63795b0a8142e279327cf6dbd9302a241d7aa45) — **LIVE**。
+- [GitHub Pages 文档](https://yangchunhong3000.github.io/cn-evidence-public-docs/) — **LIVE**。
 
-**MCP 预览状态（2026-09-09）：**健康接口可达，但本次公网 `initialize` 返回 HTTP 421（`Invalid Host header`）。在公网握手及 `tools/list` 验证通过前，请使用规范 HTTP API。本页不声称已经发布至官方 MCP Registry 或 Glama。
+**集成状态更新于 2026-09-10：**Remote MCP 已上线，公网 MCP SDK 验证已通过。三个工具为 `resolve_china_company`、`get_china_supplier_evidence_basic`、`get_china_supplier_evidence_full`。Resolver 免费；Basic 和 Full 仍需明确支出授权后付款。目录上线不等于每个 Agent 或搜索引擎都能通过自然语言找到。
 
 规范付费接口使用 x402 v2 / exact、Base `eip155:8453`、USDC、EIP-3009；Basic／Full 金额分别为 `2000`／`10000` 最小单位。完整资产与收款地址见[英文支付参数表](README.md#canonical-x402-payment-parameters)。MPP 入口是独立适配器，协议条件以其公开契约为准。
 
 ## 仓库范围
 
-本仓库只公开文档和无签名调用示例，不公开核心代码、数据库、部署凭据或私钥。`docs/` 已准备为 GitHub Pages 内容；仓库可访问不等于网站已启用，也不等于搜索引擎已收录。
+本仓库只公开文档和无签名调用示例，不公开核心代码、数据库、部署凭据或私钥。`docs/` 已发布到 [GitHub Pages](https://yangchunhong3000.github.io/cn-evidence-public-docs/)；网页可访问不等于搜索引擎已收录。
+
+Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness.
 
 文档及自编示例采用 [CC BY 4.0](LICENSE)，不授予底层数据集、第三方材料或私有实现的使用许可。

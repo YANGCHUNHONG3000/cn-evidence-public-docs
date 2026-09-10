@@ -22,16 +22,19 @@ USCC must be 18 uppercase letters/digits. Canonical protocol: x402 v2 exact, Bas
 - [Basic example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json)
 - [Full example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json)
 - [MPP adapter contract](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
-- [Remote MCP preview](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp)
+- [Remote MCP](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp): LIVE / public MCP SDK verified; Streamable HTTP; 3 tools.
+- [Glama](https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence): LIVE / Healthy / 3 tools.
+- [Official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence): active; version 0.1.0; server name dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence.
+- [MPPScan](https://mppscan.com/server/10e814be2d90b2566a8df027a63795b0a8142e279327cf6dbd9302a241d7aa45): LIVE.
 - [Public documentation repository](https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs)
 
 All examples are static and explicitly not_live_query; do not cite them as fresh supplier facts. Full's regulatory sample NOT_ENTERED is not current abnormal listing or a penalty.
 
-Remote MCP status as checked 2026-09-09: health responds, but public initialize returned 421 Invalid Host header. Use canonical HTTP API pending successful public handshake and tools/list. No Glama or official MCP Registry publication is claimed here. The MPP adapter separately advertises MPP and x402; inspect its own live schema.
+Integration status updated 2026-09-10: Remote MCP is live and public MCP SDK verification has passed. Its three tools are resolve_china_company, get_china_supplier_evidence_basic, and get_china_supplier_evidence_full. Basic and Full require spending authorization and payment; resolve is free. The MPP adapter separately advertises MPP and x402; inspect its own live schema.
 
-## HTML documentation (prepared for GitHub Pages)
+## HTML documentation (GitHub Pages: LIVE)
 
 - [English](https://yangchunhong3000.github.io/cn-evidence-public-docs/)
 - [中文](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/)
 
-Repository publication alone does not establish that GitHub Pages is enabled or that search engines indexed these URLs.
+Live documentation and directory listings do not guarantee search-engine indexing or natural-language discovery by every agent.

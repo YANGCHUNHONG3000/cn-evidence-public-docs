@@ -80,9 +80,13 @@ The current published contract describes Shenzhen company/USCC, abnormal-operati
 - [Agent usage guide](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/llms.txt)
 - [Agent402 marketplace](https://agent402.tools/base?all=1) · [Unbranded route query](https://agent402.tools/api/route?q=China%20supplier%20evidence%20company%20identity%20public%20procurement%20regulatory%20history%20provenance&network=base)
 - [MPP-compatible API origin](https://cn-evidence-mpp-public.mikeyang7789.workers.dev) · [MPP OpenAPI](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
-- [Remote MCP preview endpoint](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp)
+- [Remote MCP endpoint](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp) — **LIVE / public MCP SDK verified**, Streamable HTTP, 3 tools.
+- [Glama Connector](https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence) — **LIVE / Healthy / 3 tools**.
+- [Official MCP Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence) — **active**, version **0.1.0**; server name: `dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence`.
+- [MPPScan listing](https://mppscan.com/server/10e814be2d90b2566a8df027a63795b0a8142e279327cf6dbd9302a241d7aa45) — **LIVE**.
+- [GitHub Pages documentation](https://yangchunhong3000.github.io/cn-evidence-public-docs/) — **LIVE**.
 
-**Remote MCP preview status, 2026-09-09:** its health endpoint responds, but a public `initialize` handshake returned HTTP 421 (`Invalid Host header`) during the documentation check. Use the canonical HTTP API until a public MCP handshake and `tools/list` succeed. Health alone is not MCP compatibility verification. Official MCP Registry / Glama publication is not claimed here.
+**Integration status updated 2026-09-10:** Remote MCP is live and public MCP SDK verification has passed. The three tools are `resolve_china_company`, `get_china_supplier_evidence_basic`, and `get_china_supplier_evidence_full`. Resolution is free; Basic and Full remain paid tools requiring explicit spending authorization. Directory publication does not guarantee natural-language discovery by every agent or search engine.
 
 The MPP origin is a separate adapter advertising MPP and x402. Inspect its live contract for protocol-specific requirements. A registry listing or `discover <URL>` result is not evidence of natural-language central-search ranking.
 
@@ -101,6 +105,6 @@ Always validate the live challenge before signing. Documentation checks do not p
 
 ## About this repository
 
-Public documentation and unsigned examples only. It does not contain the private service implementation, databases, deployment credentials or wallet keys. The HTML files under `docs/` are prepared for GitHub Pages; their presence in GitHub does not by itself mean Pages is enabled or a search engine has indexed them.
+Public documentation and unsigned examples only. It does not contain the private service implementation, databases, deployment credentials or wallet keys. The HTML files under `docs/` are published on [GitHub Pages](https://yangchunhong3000.github.io/cn-evidence-public-docs/). A live page does not guarantee search-engine indexing.
 
 Documentation and authored examples are licensed under [CC BY 4.0](LICENSE). No license to underlying datasets, third-party source material or private implementation is granted by this repository.
