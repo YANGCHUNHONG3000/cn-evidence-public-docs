@@ -8,6 +8,12 @@ CN Evidence supports Chinese supplier and vendor verification with company ident
 
 **Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness.** No record found does not mean no record exists elsewhere. Procurement awards do not verify downstream contract performance. Historical abnormal-operation records do not by themselves establish current abnormal status.
 
+## Use cases
+
+- [Supplier identity](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/)
+- [Government procurement](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/)
+- [Regulatory evidence](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/)
+
 ## Choose a tool
 
 | Tool | Method and path | Price | Use it for |

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>政府采购与中标证据 API｜中国供应商历史、原始来源与采购尽调</title>
+  <meta name="description" content="采购尽调中查看中国供应商的政府采购与中标证据，区分采购公告、供应商历史和履约结论。通过 MCP 获取摘要或详细证据行，保留项目与原始来源定位，仅限已配置数据集。">
+  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/">
+  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">
+  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/">
+  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header><nav aria-label="主导航"><a class="brand" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">CN EVIDENCE</a><div class="nav-links"><a href="#workflow">核验步骤</a><a href="#choose">选择工具</a><a href="#example">示例结构</a><a href="#limits">来源边界</a><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/" lang="en">English</a></div></nav></header>
+<main id="main">
+  <div class="hero">
+    <p class="eyebrow">使用场景 · 政府采购与中标证据</p>
+    <h1>查供应商中标记录，也保留能回溯的证据</h1>
+    <p class="lead">采购公告中的中标信息，可以帮助了解供应商曾参与哪些公共采购活动。但中标记录回答的是一个已记录事件，不是完整的履约表现。</p>
+    <div class="actions"><a class="button" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">查看 OpenAPI</a><a class="button secondary" href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">连接 Remote MCP</a></div>
+    <p class="note">Remote MCP 是供客户端配置的 Streamable HTTP 端点，不是网页查询表单。</p>
+  </div>
+  <section id="workflow" aria-labelledby="workflow-title">
+    <h2 id="workflow-title">中标证据能说明什么，不能说明什么</h2>
+    <p>政府采购记录中的公告编号、项目编号、采购方、日期和金额，在原始来源确有这些字段时，可为供应商历史筛查提供线索。字段缺失时，不应由智能体补出“看起来合理”的项目详情。</p>
+<p class="warning"><strong>中标 ≠ 已证明履约成功。</strong>中标证据不能单独证明交付、验收、付款完成或没有争议。采购尽调需要这些结论时，应另行取得对应材料。</p>
+<ol><li>先确认供应商主体。采购公告里的同名企业，不应在缺少关联依据时自动归到目标公司。</li><li>先看摘要、<code>linkage</code> 和 <code>dataset_coverage</code>。当前文档中的采购来源为北京中标数据，并不是全国所有招投标记录。</li><li>需要留档时选择 Full，保存 <code>content_id</code>、公告或标段编号，以及返回时存在的 <code>source_files</code>。这些证据来源字段帮助你回到原始材料。</li></ol>
+<p>可追溯不等于每行都有公开直达链接。数据集定位与单条记录定位各有作用，应保留返回内容，不把供应商中标次数改写成“已验证履约能力”。</p>
+  </section>
+  <section id="choose" aria-labelledby="choose-title">
+    <h2 id="choose-title">按这次任务选择证据深度</h2>
+    <div class="table-wrap"><table><caption>免费解析与按次付费工具</caption><thead><tr><th scope="col">工具</th><th scope="col">价格</th><th scope="col">何时使用</th></tr></thead><tbody>
+      <tr><th scope="row"><code>resolve_china_company</code></th><td>免费 / Free</td><td>按 company 名称解析主体并检查歧义；多个候选时先取得准确 USCC，再使用付费工具。</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_basic</code></th><td>Basic $0.002 USDC</td><td>先了解是否有值得继续核对的采购活动，可用 Basic 的采购摘要和关联信息。它不包含详细中标证据行。</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_full</code></th><td>Full $0.01 USDC</td><td>需要具体来源记录时选 Full。读取 total_items、returned_items 和 truncated；evidence_limit 限制返回条数，截断后的结果不能当成全部可用证据。</td></tr>
+    </tbody></table></div>
+    <p>无需注册，无需 API Key，无需预充值账户。 <strong>x402 · Base USDC</strong>. 付费调用仍需要兼容且有余额的钱包与明确支出授权。</p>
+    <p>Full 的 include_evidence 默认 true；evidence_limit 为 0–100 的整数。记录是否存在及返回多少，以来源覆盖和响应中的 evidence_meta 为准。</p>
+  </section>
+  <section id="example" aria-labelledby="example-title">
+    <h2 id="example-title">示例结构，不是实时事实</h2>
+    <p>示例结构：从已有公开静态采购样例中仅摘取来源定位字段，不是实时查询，也没有新增任何企业中标事实。采购方、金额和公司信息已省略。</p>
+    <pre><code data-example="procurement">{
+  &quot;type&quot;: &quot;PROCUREMENT_AWARD&quot;,
+  &quot;source&quot;: &quot;Beijing Government Data Open Platform&quot;,
+  &quot;dataset&quot;: &quot;北京市财政局-中标公告&quot;,
+  &quot;content_id&quot;: &quot;19201&quot;,
+  &quot;checked_at&quot;: &quot;2026-09-08T19:30:41Z&quot;
+}</code></pre>
+    <p class="scope">静态说明 / example；not_live_query。它只是 schema 摘录或来源字段投影，不是完整成功响应，不能用来证明任何企业的当前情况。</p>
+    <p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">查看原始免费静态样例</a> · <a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">核对完整 schema</a></p>
+  </section>
+  <section id="limits" aria-labelledby="limits-title">
+    <h2 id="limits-title">保留来源范围，不放大结论</h2>
+    <p>结果仅覆盖当前已配置的官方/开放数据集，不应理解为全国范围完整覆盖。没查到不代表全国没有中标记录。x402 按次支付适合先做摘要筛查，再为需要复查的个案购买证据；无需预充值账户不等于付费调用无需支出授权。</p>
+    <p class="scope">结果仅覆盖当前已配置的官方/开放数据集，不应理解为全国范围完整覆盖。</p>
+  </section>
+  <section id="integrate" aria-labelledby="integrate-title">
+    <h2 id="integrate-title">接入现有服务</h2>
+    <p>Remote MCP: <a href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp</a></p>
+    <ul class="links"><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">查看 OpenAPI</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/#tools">免费 Resolver 使用说明</a></li><li><a href="https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence">查看 Glama</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">查看 GitHub</a></li></ul>
+    <h3>相关任务</h3>
+    <ul><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/">供应商主体核验</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/">行政处罚与监管证据</a></li></ul>
+    <p><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">返回首页与使用场景</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/" lang="en">English version</a></p>
+  </section>
+</main>
+<footer><p>CN Evidence · 公共文档与静态示例，不公开私有实现或数据库。</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">文档许可</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/llms.txt">llms.txt</a> · 使用前检查实时 API 契约。</p></footer>
+</body>
+</html>

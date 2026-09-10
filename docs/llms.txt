@@ -38,3 +38,13 @@ Integration status updated 2026-09-10: Remote MCP is live and public MCP SDK ver
 - [中文](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/)
 
 Live documentation and directory listings do not guarantee search-engine indexing or natural-language discovery by every agent.
+## Use Cases / 使用场景
+
+- [Supplier identity (en)](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/)
+- [Government procurement (en)](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/)
+- [Regulatory evidence (en)](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/)
+- [供应商主体核验 (zh-CN)](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/)
+- [政府采购与中标证据 (zh-CN)](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/)
+- [行政处罚与监管证据 (zh-CN)](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/)
+
+These task pages explain how to choose evidence depth. They are documentation, not live supplier facts or an indexing guarantee.

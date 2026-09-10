@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chinese Company Regulatory &amp; Administrative Penalty Evidence API</title>
+  <meta name="description" content="Review Chinese company regulatory history and available administrative penalty evidence. Preserve provenance via MCP and x402; historical records are not verdicts.">
+  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">
+  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">
+  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/">
+  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><nav aria-label="Main navigation"><a class="brand" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">CN EVIDENCE</a><div class="nav-links"><a href="#workflow">Workflow</a><a href="#choose">Choose a tool</a><a href="#example">Example structure</a><a href="#limits">Source limits</a><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/" lang="zh-CN">中文</a></div></nav></header>
+<main id="main">
+  <div class="hero">
+    <p class="eyebrow">Use case · Regulatory evidence</p>
+    <h1>Review Regulatory Evidence Before Approving a Chinese Supplier</h1>
+    <p class="lead">Keep regulatory records, source scope and interpretation separate. An agent needs evidence it can inspect—not a risk label inferred from a name match.</p>
+    <div class="actions"><a class="button" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Inspect OpenAPI</a><a class="button secondary" href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">Connect Remote MCP</a></div>
+    <p class="note">Remote MCP is a Streamable HTTP endpoint for client configuration, not a browser search form.</p>
+  </div>
+  <section id="workflow" aria-labelledby="workflow-title">
+    <h2 id="workflow-title">Distinguish regulatory history from a current compliance decision</h2>
+    <p>Chinese company regulatory history can identify questions for supplier compliance review. Administrative penalties are one type of regulatory evidence; broader datasets may contain abnormal-operation workflow records that are not penalty decisions. Inspect the record type and disposition before applying vendor due diligence rules.</p>
+<p class="warning"><strong>A historical penalty record does not automatically mean a supplier is currently unqualified.</strong> A historical workflow entry may not even confirm a negative finding. Keep dates, linkage and current-status uncertainty separate.</p>
+<ol><li>Resolve company identity before associating a record with the supplier. Same-name matches without sufficient linkage should remain unresolved.</li><li>Read the source evidence with its dataset locator, <code>checked_at</code>, disposition and source-specific fields. Preserve the issuing authority and decision reference when actually present; do not manufacture them.</li><li>Apply your own approval policy to confirmed facts. Seek current authoritative records or human review when the evidence is ambiguous, old or outside coverage.</li></ol>
+<p>This independent aggregation service is not a government-operated API. It reports available evidence from configured official/open sources; it does not automatically label a company “high risk” or issue compliance clearance.</p>
+  </section>
+  <section id="choose" aria-labelledby="choose-title">
+    <h2 id="choose-title">Choose evidence depth for this task</h2>
+    <div class="table-wrap"><table><caption>Free resolution and pay-per-call tools</caption><thead><tr><th scope="col">Tool</th><th scope="col">Price</th><th scope="col">When to use it</th></tr></thead><tbody>
+      <tr><th scope="row"><code>resolve_china_company</code></th><td>Free</td><td>Resolve the company name and inspect ambiguity first; obtain the intended USCC before using paid tools when multiple candidates remain.</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_basic</code></th><td>Basic $0.002 USDC</td><td>Use Basic to identify whether the configured regulatory summaries and linkage justify further review. Zero confirmed records is not nationwide clearance.</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_full</code></th><td>Full $0.01 USDC</td><td>Use Full when reviewers need detailed regulatory evidence rows and provenance. Available records can include broader regulatory history, not necessarily a penalty; read type and disposition rather than treating every row as negative.</td></tr>
+    </tbody></table></div>
+    <p>No signup. No API key. No prepaid account. <strong>x402 · Base USDC</strong>. Paid calls still require a compatible funded wallet and explicit spending authorization.</p>
+    <p>For Full, include_evidence defaults to true; evidence_limit is an integer from 0 to 100. Available rows depend on source coverage; check evidence_meta rather than assuming completeness.</p>
+  </section>
+  <section id="example" aria-labelledby="example-title">
+    <h2 id="example-title">Example structure, not live facts</h2>
+    <p>Example structure: projection of the existing static regulatory-history sample, with all company-specific fields removed. NOT_ENTERED is explicitly not a current abnormal-listing or penalty claim. This is not a live query.</p>
+    <pre><code data-example="regulatory">{
+  &quot;type&quot;: &quot;ABNORMAL_OPERATION_DATASET_RECORD&quot;,
+  &quot;source&quot;: &quot;Shenzhen Government Open Data&quot;,
+  &quot;dataset&quot;: &quot;经营异常名录&quot;,
+  &quot;dataset_id&quot;: &quot;1137936299&quot;,
+  &quot;checked_at&quot;: &quot;2026-09-08T19:30:41Z&quot;,
+  &quot;record_disposition&quot;: &quot;NOT_ENTERED&quot;,
+  &quot;indicates_abnormal_listing&quot;: false,
+  &quot;negative_signal&quot;: false,
+  &quot;current_status_confirmed&quot;: false
+}</code></pre>
+    <p class="scope">Static example / not_live_query. This is a schema excerpt or field projection, not a complete success response or evidence of any supplier’s current state.</p>
+    <p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">Inspect the original free static example</a> · <a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Inspect the complete schema</a></p>
+  </section>
+  <section id="limits" aria-labelledby="limits-title">
+    <h2 id="limits-title">Keep source scope attached to the conclusion</h2>
+    <p>Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness. The documented regional datasets do not establish a national regulatory record for a supplier. A checked_at timestamp is not proof that the source record was updated then. Preserve UNKNOWN and do not turn historical evidence into an automatic current-risk conclusion.</p>
+    <p class="scope">Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness.</p>
+  </section>
+  <section id="integrate" aria-labelledby="integrate-title">
+    <h2 id="integrate-title">Use the existing service</h2>
+    <p>Remote MCP: <a href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp</a></p>
+    <ul class="links"><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Inspect OpenAPI</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/#tools">Try free resolver documentation</a></li><li><a href="https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence">View Glama</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">View GitHub</a></li></ul>
+    <h3>Related tasks</h3>
+    <ul><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">Supplier identity</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">Government procurement</a></li></ul>
+    <p><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">Back to homepage and use cases</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/" lang="zh-CN">中文版</a></p>
+  </section>
+</main>
+<footer><p>CN Evidence · Public documentation and static examples. No private implementation or database is published here.</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">Documentation license</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/llms.txt">llms.txt</a> · Read the live API contract before use.</p></footer>
+</body>
+</html>

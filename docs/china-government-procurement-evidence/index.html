@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>China Government Procurement &amp; Contract Award Evidence API</title>
+  <meta name="description" content="Inspect China government procurement and contract award evidence for supplier screening. Keep traceable sources via MCP and x402; awards do not prove performance.">
+  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">
+  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">
+  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/">
+  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><nav aria-label="Main navigation"><a class="brand" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">CN EVIDENCE</a><div class="nav-links"><a href="#workflow">Workflow</a><a href="#choose">Choose a tool</a><a href="#example">Example structure</a><a href="#limits">Source limits</a><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/" lang="zh-CN">中文</a></div></nav></header>
+<main id="main">
+  <div class="hero">
+    <p class="eyebrow">Use case · Government procurement</p>
+    <h1>Check a Chinese Supplier’s Government Procurement Evidence</h1>
+    <p class="lead">Procurement awards can show a supplier’s recorded activity with public buyers. They are a useful trail to investigate—not a certificate of successful delivery.</p>
+    <div class="actions"><a class="button" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Inspect OpenAPI</a><a class="button secondary" href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">Connect Remote MCP</a></div>
+    <p class="note">Remote MCP is a Streamable HTTP endpoint for client configuration, not a browser search form.</p>
+  </div>
+  <section id="workflow" aria-labelledby="workflow-title">
+    <h2 id="workflow-title">Read an award as a recorded event, not a performance verdict</h2>
+    <p>China government procurement records can help an agent examine reported buyer relationships, bid awards and tender history. Chinese supplier contract awards may identify an announcement, date, buyer or amount when those fields exist in the source. Missing fields should remain missing.</p>
+<p class="warning"><strong>Awards are not proof of contract performance.</strong> An award does not establish delivery quality, acceptance, payment completion or the absence of a later dispute. Verify those separately before treating a supplier as proven.</p>
+<ol><li>Confirm the legal company first. Similar names in a procurement announcement are not enough to attribute an award automatically.</li><li>Inspect procurement summaries alongside <code>linkage</code> and <code>dataset_coverage</code>. The currently documented procurement source is Beijing award data, not every China tender.</li><li>When a decision needs supporting records, request Full and preserve <code>content_id</code>, announcement or lot identifiers and <code>source_files</code> when present. These traceable sources help a reviewer locate the underlying material.</li></ol>
+<p>For supplier due diligence, an aggregate award count is a screening signal. Procurement evidence should retain the original source context rather than become an unsupported “performed successfully” label.</p>
+  </section>
+  <section id="choose" aria-labelledby="choose-title">
+    <h2 id="choose-title">Choose evidence depth for this task</h2>
+    <div class="table-wrap"><table><caption>Free resolution and pay-per-call tools</caption><thead><tr><th scope="col">Tool</th><th scope="col">Price</th><th scope="col">When to use it</th></tr></thead><tbody>
+      <tr><th scope="row"><code>resolve_china_company</code></th><td>Free</td><td>Resolve the company name and inspect ambiguity first; obtain the intended USCC before using paid tools when multiple candidates remain.</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_basic</code></th><td>Basic $0.002 USDC</td><td>Choose Basic to screen procurement activity and linkage before deciding whether to investigate. It returns summaries and coverage, not detailed award rows.</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_full</code></th><td>Full $0.01 USDC</td><td>Choose Full for detailed evidence rows available in configured datasets. Check total_items, returned_items and truncated; evidence_limit can restrict your view, so a short report is not every available record.</td></tr>
+    </tbody></table></div>
+    <p>No signup. No API key. No prepaid account. <strong>x402 · Base USDC</strong>. Paid calls still require a compatible funded wallet and explicit spending authorization.</p>
+    <p>For Full, include_evidence defaults to true; evidence_limit is an integer from 0 to 100. Available rows depend on source coverage; check evidence_meta rather than assuming completeness.</p>
+  </section>
+  <section id="example" aria-labelledby="example-title">
+    <h2 id="example-title">Example structure, not live facts</h2>
+    <p>Example structure: provenance-only projection of an existing public static procurement sample. This is not a live query, a new award, or a claim about any company. It intentionally omits buyer, amount and company facts.</p>
+    <pre><code data-example="procurement">{
+  &quot;type&quot;: &quot;PROCUREMENT_AWARD&quot;,
+  &quot;source&quot;: &quot;Beijing Government Data Open Platform&quot;,
+  &quot;dataset&quot;: &quot;北京市财政局-中标公告&quot;,
+  &quot;content_id&quot;: &quot;19201&quot;,
+  &quot;checked_at&quot;: &quot;2026-09-08T19:30:41Z&quot;
+}</code></pre>
+    <p class="scope">Static example / not_live_query. This is a schema excerpt or field projection, not a complete success response or evidence of any supplier’s current state.</p>
+    <p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">Inspect the original free static example</a> · <a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Inspect the complete schema</a></p>
+  </section>
+  <section id="limits" aria-labelledby="limits-title">
+    <h2 id="limits-title">Keep source scope attached to the conclusion</h2>
+    <p>Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness. No procurement record found is not proof of no awards elsewhere. A content_id locates the dataset; preserve finer announcement/record locators when available. x402 pay-per-call lets an agent request detail for the cases that need it, with spending authorization—not a prepaid account.</p>
+    <p class="scope">Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness.</p>
+  </section>
+  <section id="integrate" aria-labelledby="integrate-title">
+    <h2 id="integrate-title">Use the existing service</h2>
+    <p>Remote MCP: <a href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp</a></p>
+    <ul class="links"><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">Inspect OpenAPI</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/#tools">Try free resolver documentation</a></li><li><a href="https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence">View Glama</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">View GitHub</a></li></ul>
+    <h3>Related tasks</h3>
+    <ul><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">Supplier identity</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">Regulatory evidence</a></li></ul>
+    <p><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">Back to homepage and use cases</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/" lang="zh-CN">中文版</a></p>
+  </section>
+</main>
+<footer><p>CN Evidence · Public documentation and static examples. No private implementation or database is published here.</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">Documentation license</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/llms.txt">llms.txt</a> · Read the live API contract before use.</p></footer>
+</body>
+</html>

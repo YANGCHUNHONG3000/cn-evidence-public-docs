@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>中国供应商核验 API｜统一社会信用代码、企业主体与 AI 采购智能体</title>
+  <meta name="description" content="中国供应商核验从企业主体开始：用免费解析检查中文法定名称和同名候选，再以统一社会信用代码确认目标。通过 MCP 获取机器可读证据，x402 按次支付，无需 API Key。">
+  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/">
+  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">
+  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/">
+  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header><nav aria-label="主导航"><a class="brand" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">CN EVIDENCE</a><div class="nav-links"><a href="#workflow">核验步骤</a><a href="#choose">选择工具</a><a href="#example">示例结构</a><a href="#limits">来源边界</a><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/" lang="en">English</a></div></nav></header>
+<main id="main">
+  <div class="hero">
+    <p class="eyebrow">使用场景 · 供应商主体核验</p>
+    <h1>采购前，先确认供应商究竟是哪一家企业</h1>
+    <p class="lead">报价单上的简称、英文商号和合同上的工商主体，未必指向同一家企业。供应商尽调的第一步，是把交易对象确认清楚。</p>
+    <div class="actions"><a class="button" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">查看 OpenAPI</a><a class="button secondary" href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">连接 Remote MCP</a></div>
+    <p class="note">Remote MCP 是供客户端配置的 Streamable HTTP 端点，不是网页查询表单。</p>
+  </div>
+  <section id="workflow" aria-labelledby="workflow-title">
+    <h2 id="workflow-title">先核对企业主体，再购买证据</h2>
+    <p>中国企业核验不能只看名字像不像。品牌名、简称、翻译名可能混用，同名候选也可能存在。AI采购智能体如果直接选第一条结果，就可能把别家公司的中标或监管记录关联到你的供应商。</p>
+<p>统一社会信用代码（USCC / Unified Social Credit Code）用于识别目标企业主体。18位字符格式正确，只说明输入满足格式规则，并不证明代码确实属于这家供应商。应把代码与中文法定名称一起核对。</p>
+<ol><li>先用免费 <code>resolve_china_company</code>，传入中文 <code>company</code> 名称，检查当前配置范围内的主体候选。免费解析不接受 <code>uscc</code> 参数。</li><li>若有多个候选，不自动猜测。向交易对方取得准确法定名称和统一社会信用代码，确认 intended legal entity。</li><li>再把已确认的 <code>uscc</code> 交给 Basic 或 Full，保留返回的关联状态；证据不足时允许暂停或转人工。</li></ol>
+<p>中国供应商核验的价值不只是返回一个名称，而是让后续机器可读证据有明确的关联对象。来源定位信息（provenance）能帮助采购人员复查智能体引用的依据。</p>
+  </section>
+  <section id="choose" aria-labelledby="choose-title">
+    <h2 id="choose-title">按这次任务选择证据深度</h2>
+    <div class="table-wrap"><table><caption>免费解析与按次付费工具</caption><thead><tr><th scope="col">工具</th><th scope="col">价格</th><th scope="col">何时使用</th></tr></thead><tbody>
+      <tr><th scope="row"><code>resolve_china_company</code></th><td>免费 / Free</td><td>按 company 名称解析主体并检查歧义；多个候选时先取得准确 USCC，再使用付费工具。</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_basic</code></th><td>Basic $0.002 USDC</td><td>初步准入筛查可选 Basic：低成本查看企业身份、采购与监管摘要、关联状态和来源范围，不返回详细证据行。</td></tr>
+      <tr><th scope="row"><code>get_china_supplier_evidence_full</code></th><td>Full $0.01 USDC</td><td>需要审批留档或核对摘要背后的记录时选 Full：获取数据集中实际可用的详细证据行与来源。付费获得记录不等于获得合规认证。</td></tr>
+    </tbody></table></div>
+    <p>无需注册，无需 API Key，无需预充值账户。 <strong>x402 · Base USDC</strong>. 付费调用仍需要兼容且有余额的钱包与明确支出授权。</p>
+    <p>Full 的 include_evidence 默认 true；evidence_limit 为 0–100 的整数。记录是否存在及返回多少，以来源覆盖和响应中的 evidence_meta 为准。</p>
+  </section>
+  <section id="example" aria-labelledby="example-title">
+    <h2 id="example-title">示例结构，不是实时事实</h2>
+    <p>示例结构：摘取当前公开 Full 请求 schema 的部分约束，不是企业查询结果，也不是完整可执行请求。没有填写真实企业名称或代码。Basic/Full 的 company、uscc 至少提供一个；免费解析要求 company。</p>
+    <pre><code data-example="identity">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;properties&quot;: {
+    &quot;company&quot;: {
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;minLength&quot;: 2,
+      &quot;maxLength&quot;: 200
+    },
+    &quot;uscc&quot;: {
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;minLength&quot;: 18,
+      &quot;maxLength&quot;: 18,
+      &quot;pattern&quot;: &quot;^[0-9A-Z]{18}$&quot;
+    }
+  },
+  &quot;anyOf&quot;: [
+    {
+      &quot;required&quot;: [
+        &quot;company&quot;
+      ]
+    },
+    {
+      &quot;required&quot;: [
+        &quot;uscc&quot;
+      ]
+    }
+  ]
+}</code></pre>
+    <p class="scope">静态说明 / example；not_live_query。它只是 schema 摘录或来源字段投影，不是完整成功响应，不能用来证明任何企业的当前情况。</p>
+    <p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json">查看原始免费静态样例</a> · <a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">核对完整 schema</a></p>
+  </section>
+  <section id="limits" aria-labelledby="limits-title">
+    <h2 id="limits-title">保留来源范围，不放大结论</h2>
+    <p>结果仅覆盖当前已配置的官方/开放数据集，不应理解为全国范围完整覆盖。数据集 ID 用来定位数据集；有记录编号、原始来源或文件定位时应一并保存。未命中不能解释成企业不存在，查询时间也不能替代上游记录更新时间。</p>
+    <p class="scope">结果仅覆盖当前已配置的官方/开放数据集，不应理解为全国范围完整覆盖。</p>
+  </section>
+  <section id="integrate" aria-labelledby="integrate-title">
+    <h2 id="integrate-title">接入现有服务</h2>
+    <p>Remote MCP: <a href="https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp">https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp</a></p>
+    <ul class="links"><li><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">查看 OpenAPI</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/#tools">免费 Resolver 使用说明</a></li><li><a href="https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence">查看 Glama</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">查看 GitHub</a></li></ul>
+    <h3>相关任务</h3>
+    <ul><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/">政府采购与中标证据</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/">行政处罚与监管证据</a></li></ul>
+    <p><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">返回首页与使用场景</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/" lang="en">English version</a></p>
+  </section>
+</main>
+<footer><p>CN Evidence · 公共文档与静态示例，不公开私有实现或数据库。</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">文档许可</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/llms.txt">llms.txt</a> · 使用前检查实时 API 契约。</p></footer>
+</body>
+</html>

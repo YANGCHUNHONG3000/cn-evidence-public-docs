@@ -8,6 +8,12 @@
 
 **结果仅覆盖已配置的官方／开放数据集，不代表中国全国完整覆盖。** 没查到不等于全国不存在；中标不等于合同履约已核验；经营异常历史不等于当前经营异常。
 
+## 使用场景
+
+- [供应商主体核验](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/)
+- [政府采购与中标证据](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/)
+- [行政处罚与监管证据](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/)
+
 ## 如何选择
 
 | 商品 | 接口 | 价格 | 适用场景 |

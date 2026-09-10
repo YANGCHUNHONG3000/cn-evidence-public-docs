@@ -13,9 +13,13 @@
 </head>
 <body>
 <a class="skip" href="#main">跳至正文</a>
-<header><nav aria-label="主导航"><a class="brand" href="./">CN EVIDENCE</a><div class="nav-links"><a href="#tools">工具与价格</a><a href="#coverage">来源范围</a><a href="#integrate">开始接入</a><a href="../" lang="en">English</a></div></nav></header>
+<header><nav aria-label="主导航"><a class="brand" href="./">CN EVIDENCE</a><div class="nav-links"><a href="#use-cases">使用场景</a><a href="#tools">工具与价格</a><a href="#coverage">来源范围</a><a href="#integrate">开始接入</a><a href="../" lang="en">English</a></div></nav></header>
 <main id="main">
   <div class="hero"><p class="eyebrow">中国供应商证据 · 面向 AI Agent</p><h1>核验企业主体，<br>保留证据来源。</h1><p class="lead">把企业身份、统一社会信用代码、政府采购中标和监管历史汇成机器可读 JSON，让供应商核验有事实、有范围、有来源。</p><p>无需注册，无需 API Key。<strong>x402 · Base USDC · 按次支付。</strong></p><div class="actions"><a class="button" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json">查看 OpenAPI</a><a class="button secondary" href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json">免费查看 Full 样例</a></div><p class="scope"><strong>先理解范围。</strong>结果仅覆盖已配置的官方／开放数据集，不代表中国全国完整覆盖。中标记录不等于合同履约已核验。</p></div>
+  <section id="use-cases" aria-labelledby="use-cases-title">
+    <h2 id="use-cases-title">使用场景</h2>
+    <ul class="links"><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/">中国供应商主体核验</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/">政府采购与中标证据</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/">行政处罚与监管证据</a></li></ul>
+  </section>
   <section id="tools" aria-labelledby="tools-title"><h2 id="tools-title">先确认主体，再选择证据深度</h2><div class="cards">
     <article class="card"><h3>Resolver 主体解析</h3><p class="price">免费</p><p>按中文公司名查找法定主体和同名候选，在购买证据之前检查歧义。</p><p class="method">GET <code>/free/cn/entity/resolve</code></p><p><code>resolve_china_company</code></p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json">查看解析样例</a></article>
     <article class="card"><h3>Basic 摘要筛查</h3><p class="price">$0.002 <span>USDC／次</span></p><p>低成本查看企业身份、采购与监管摘要、关联状态和来源范围。不返回详细证据行。</p><p class="method">GET <code>/x402/cn/supplier/evidence/basic</code></p><p><code>get_china_supplier_evidence_basic</code></p><a href="https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json">查看 Basic 样例</a></article>
