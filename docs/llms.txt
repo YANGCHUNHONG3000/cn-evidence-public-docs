@@ -14,18 +14,18 @@ USCC must be 18 uppercase letters/digits. Canonical protocol: x402 v2 exact, Bas
 
 ## Authoritative public API links
 
-- [API origin](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/)
-- [OpenAPI](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json)
-- [Agent manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/agent.json)
-- [x402 manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/x402)
-- [Resolver example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json)
-- [Basic example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json)
-- [Full example](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json)
-- [MPP adapter contract](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
-- [Remote MCP](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp): LIVE / public MCP SDK verified; Streamable HTTP; 3 tools.
+- [API origin](https://api.cnevidence.com/)
+- [OpenAPI](https://api.cnevidence.com/openapi.json)
+- [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)
+- [x402 manifest](https://api.cnevidence.com/.well-known/x402)
+- [Resolver example](https://api.cnevidence.com/.well-known/cn-evidence/examples/resolve.json)
+- [Basic example](https://api.cnevidence.com/.well-known/cn-evidence/examples/basic.json)
+- [Full example](https://api.cnevidence.com/.well-known/cn-evidence/examples/full.json)
+- [MPP adapter contract](https://mpp.cnevidence.com/openapi.json)
+- [Remote MCP](https://mcp.cnevidence.com/mcp): LIVE / public MCP SDK verified; Streamable HTTP; 3 tools.
 - [Glama](https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence): LIVE / Healthy / 3 tools.
-- [Official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence): active; version 0.1.0; server name dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence.
-- [MPPScan](https://mppscan.com/server/10e814be2d90b2566a8df027a63795b0a8142e279327cf6dbd9302a241d7aa45): LIVE.
+- [Official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence): active; version 0.1.1; server name dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence.
+- [MPPScan](https://mppscan.com/server/7c16491831a2c807c38cf2b2529d6f9f09e3a97e082d028d7cdeb129b950beb1): LIVE.
 - [Public documentation repository](https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs)
 
 All examples are static and explicitly not_live_query; do not cite them as fresh supplier facts. Full's regulatory sample NOT_ENTERED is not current abnormal listing or a penalty.

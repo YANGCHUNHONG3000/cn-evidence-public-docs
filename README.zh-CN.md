@@ -2,7 +2,7 @@
 
 面向 AI Agent 的中国企业／供应商证据聚合服务。**无需注册或 API Key，使用 x402 按次支付 Base USDC。** 付费调用仍需要兼容的有余额钱包；阅读说明、OpenAPI 和静态样例免费。
 
-[English](README.md) · [中文网页文档](docs/zh/index.html) · [英文网页文档](docs/index.html) · [实时 OpenAPI](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json)
+[English](README.md) · [中文网页文档](docs/zh/index.html) · [英文网页文档](docs/index.html) · [实时 OpenAPI](https://api.cnevidence.com/openapi.json)
 
 用于中国供应商核验、企业身份和统一社会信用代码确认、政府采购中标记录、监管历史及当前配置范围内的行政处罚证据查询，并保留数据集范围与可追溯来源。
 
@@ -22,7 +22,7 @@
 | Basic | `GET /x402/cn/supplier/evidence/basic` | $0.002 USDC | 企业身份、采购与监管摘要、关联状态和覆盖范围，不返回详细证据行。 |
 | Full | `POST /x402/cn/supplier/evidence` | $0.01 USDC | 在摘要基础上，按需返回详细证据行与来源信息；以数据集实际可用记录为准。 |
 
-规范 API：<https://cn-evidence-agent402-public.mikeyang7789.workers.dev>
+规范 API：<https://api.cnevidence.com>
 
 如果 Resolver 返回多个候选，不要自动猜测。先取得目标公司的准确 USCC，再传给 Basic／Full。免费 Resolver 本身只接受 `company`，不要向它发送不存在的 `uscc` 参数。
 
@@ -35,7 +35,7 @@
 
 ```bash
 curl -i -X POST \
-  'https://cn-evidence-agent402-public.mikeyang7789.workers.dev/x402/cn/supplier/evidence' \
+  'https://api.cnevidence.com/x402/cn/supplier/evidence' \
   -H 'Content-Type: application/json' \
   --data '{"uscc":"9144030033518485XF","include_evidence":true,"evidence_limit":2}'
 ```
@@ -44,9 +44,9 @@ curl -i -X POST \
 
 ## 付款前看懂返回内容
 
-- [Resolver 静态样例](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json)：精确命中与独立的歧义候选形状。
-- [Basic 静态样例](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json)：摘要、关联状态和来源范围，详细证据数组为空。
-- [Full 静态样例](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json)：采购中标及监管历史各一行；总数 6，返回 2，`truncated=true`。
+- [Resolver 静态样例](https://api.cnevidence.com/.well-known/cn-evidence/examples/resolve.json)：精确命中与独立的歧义候选形状。
+- [Basic 静态样例](https://api.cnevidence.com/.well-known/cn-evidence/examples/basic.json)：摘要、关联状态和来源范围，详细证据数组为空。
+- [Full 静态样例](https://api.cnevidence.com/.well-known/cn-evidence/examples/full.json)：采购中标及监管历史各一行；总数 6，返回 2，`truncated=true`。
 
 样例明确标记 `example:true`、`not_live_query:true`，不能当成实时尽调事实。其中监管样例的 `NOT_ENTERED` 不代表当前经营异常，更不是一条已确认处罚。
 
@@ -67,19 +67,29 @@ curl -i -X POST \
 
 ## 机器入口
 
-- [OpenAPI](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json)
-- [Agent manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/agent.json)／[x402 manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/x402)／[使用指南](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/llms.txt)
+- [OpenAPI](https://api.cnevidence.com/openapi.json)
+- [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)／[x402 manifest](https://api.cnevidence.com/.well-known/x402)／[使用指南](https://api.cnevidence.com/llms.txt)
 - [Agent402 公共目录](https://agent402.tools/base?all=1)
-- [MPP 适配入口](https://cn-evidence-mpp-public.mikeyang7789.workers.dev)／[MPP OpenAPI](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
-- [Remote MCP 公网端点](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp) — **LIVE / public MCP SDK verified**；Streamable HTTP，3 tools。
+- [MPP 适配入口](https://mpp.cnevidence.com)／[MPP OpenAPI](https://mpp.cnevidence.com/openapi.json)
+- [Remote MCP 公网端点](https://mcp.cnevidence.com/mcp) — **LIVE / public MCP SDK verified**；Streamable HTTP，3 tools。
 - [Glama Connector](https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence) — **LIVE / Healthy / 3 tools**。
-- [Official MCP Registry 记录](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence) — **active**，版本 **0.1.0**；server name：`dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence`。
-- [MPPScan 公开页面](https://mppscan.com/server/10e814be2d90b2566a8df027a63795b0a8142e279327cf6dbd9302a241d7aa45) — **LIVE**。
+- [Official MCP Registry 记录](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence) — **active**，版本 **0.1.1**；server name：`dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence`。
+- [MPPScan 公开页面](https://mppscan.com/server/7c16491831a2c807c38cf2b2529d6f9f09e3a97e082d028d7cdeb129b950beb1) — **LIVE**。
 - [GitHub Pages 文档](https://yangchunhong3000.github.io/cn-evidence-public-docs/) — **LIVE**。
 
 **集成状态更新于 2026-09-10：**Remote MCP 已上线，公网 MCP SDK 验证已通过。三个工具为 `resolve_china_company`、`get_china_supplier_evidence_basic`、`get_china_supplier_evidence_full`。Resolver 免费；Basic 和 Full 仍需明确支出授权后付款。目录上线不等于每个 Agent 或搜索引擎都能通过自然语言找到。
 
 规范付费接口使用 x402 v2 / exact、Base `eip155:8453`、USDC、EIP-3009；Basic／Full 金额分别为 `2000`／`10000` 最小单位。完整资产与收款地址见[英文支付参数表](README.md#canonical-x402-payment-parameters)。MPP 入口是独立适配器，协议条件以其公开契约为准。
+
+## 旧入口 / 兼容说明
+
+新集成请使用 `https://api.cnevidence.com`、`https://mcp.cnevidence.com/mcp` 和 `https://mpp.cnevidence.com`。以下旧入口仅保留兼容用途，其 metadata 可指向正式域名：
+
+- API：`https://cn-evidence-agent402-public.mikeyang7789.workers.dev`
+- MCP：`https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp`
+- MPP：`https://cn-evidence-mpp-public.mikeyang7789.workers.dev`
+
+域名链接更新于 2026-09-12。目录 identity 保持不变；尚未完成迁移的第三方目录可能仍显示旧 URL。
 
 ## 仓库范围
 

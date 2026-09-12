@@ -2,7 +2,7 @@
 
 Machine-readable evidence for AI agents verifying Chinese suppliers. **No signup or API key. Pay per call with x402 and USDC on Base.** A compatible funded wallet is needed for paid calls; reading the documentation and static examples is free.
 
-[中文说明](README.zh-CN.md) · [English HTML documentation](docs/index.html) · [中文 HTML 文档](docs/zh/index.html) · [Live OpenAPI](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json)
+[中文说明](README.zh-CN.md) · [English HTML documentation](docs/index.html) · [中文 HTML 文档](docs/zh/index.html) · [Live OpenAPI](https://api.cnevidence.com/openapi.json)
 
 CN Evidence supports Chinese supplier and vendor verification with company identity / Unified Social Credit Code (USCC), government procurement contract-award history, regulatory-history facts, available administrative-penalty evidence, and traceable evidence sources. It aggregates configured datasets into JSON so an agent can inspect scope and provenance in one response.
 
@@ -22,7 +22,7 @@ CN Evidence supports Chinese supplier and vendor verification with company ident
 | `get_china_supplier_evidence_basic` | `GET /x402/cn/supplier/evidence/basic` | $0.002 USDC | Low-cost identity, procurement and regulatory screening summaries, linkage and source coverage. Detailed evidence rows are omitted. |
 | `get_china_supplier_evidence_full` | `POST /x402/cn/supplier/evidence` | $0.01 USDC | Screening plus detailed evidence rows and provenance, when available in configured datasets. |
 
-Canonical API origin: <https://cn-evidence-agent402-public.mikeyang7789.workers.dev>
+Canonical API origin: <https://api.cnevidence.com>
 
 If the resolver returns multiple candidates, do not pick automatically. Obtain the intended entity's exact USCC, then use it in Basic or Full. The resolver itself accepts a company-name query, not a `uscc` parameter.
 
@@ -31,17 +31,17 @@ If the resolver returns multiple candidates, do not pick automatically. Obtain t
 ```bash
 # Free entity resolution. The company is the one used in the public static examples.
 curl --get \
-  'https://cn-evidence-agent402-public.mikeyang7789.workers.dev/free/cn/entity/resolve' \
+  'https://api.cnevidence.com/free/cn/entity/resolve' \
   --data-urlencode 'company=深圳希施玛数据科技有限公司'
 
 # Unsigned Basic request: inspect HTTP 402; this command cannot pay.
 curl -i --get \
-  'https://cn-evidence-agent402-public.mikeyang7789.workers.dev/x402/cn/supplier/evidence/basic' \
+  'https://api.cnevidence.com/x402/cn/supplier/evidence/basic' \
   --data-urlencode 'uscc=9144030033518485XF'
 
 # Unsigned Full request: inspect HTTP 402; no payment signature is supplied.
 curl -i -X POST \
-  'https://cn-evidence-agent402-public.mikeyang7789.workers.dev/x402/cn/supplier/evidence' \
+  'https://api.cnevidence.com/x402/cn/supplier/evidence' \
   -H 'Content-Type: application/json' \
   --data '{"uscc":"9144030033518485XF","include_evidence":true,"evidence_limit":2}'
 ```
@@ -61,9 +61,9 @@ These are ordinary unsigned HTTP requests, not an auto-paying SDK. To purchase, 
 
 | Example | What it explains |
 | --- | --- |
-| [Resolver](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/resolve.json) | Exact-name resolution and a separate same-name ambiguity illustration. |
-| [Basic](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/basic.json) | Summary fields and coverage, without detailed evidence rows. |
-| [Full](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/cn-evidence/examples/full.json) | Two representative rows: procurement award and regulatory history; a limit of 2, total of 6, and truncation. |
+| [Resolver](https://api.cnevidence.com/.well-known/cn-evidence/examples/resolve.json) | Exact-name resolution and a separate same-name ambiguity illustration. |
+| [Basic](https://api.cnevidence.com/.well-known/cn-evidence/examples/basic.json) | Summary fields and coverage, without detailed evidence rows. |
+| [Full](https://api.cnevidence.com/.well-known/cn-evidence/examples/full.json) | Two representative rows: procurement award and regulatory history; a limit of 2, total of 6, and truncation. |
 
 The examples are marked `example:true` and `not_live_query:true`. They are not fresh facts about a supplier. In particular, the regulatory-history example's `NOT_ENTERED` disposition is **not** a confirmed current abnormal listing or a penalty.
 
@@ -79,17 +79,17 @@ The current published contract describes Shenzhen company/USCC, abnormal-operati
 
 ## Machine discovery and integrations
 
-- [Machine homepage](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/)
-- [OpenAPI](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json)
-- [Agent manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/agent.json)
-- [x402 manifest](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/.well-known/x402)
-- [Agent usage guide](https://cn-evidence-agent402-public.mikeyang7789.workers.dev/llms.txt)
+- [Machine homepage](https://api.cnevidence.com/)
+- [OpenAPI](https://api.cnevidence.com/openapi.json)
+- [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)
+- [x402 manifest](https://api.cnevidence.com/.well-known/x402)
+- [Agent usage guide](https://api.cnevidence.com/llms.txt)
 - [Agent402 marketplace](https://agent402.tools/base?all=1) · [Unbranded route query](https://agent402.tools/api/route?q=China%20supplier%20evidence%20company%20identity%20public%20procurement%20regulatory%20history%20provenance&network=base)
-- [MPP-compatible API origin](https://cn-evidence-mpp-public.mikeyang7789.workers.dev) · [MPP OpenAPI](https://cn-evidence-mpp-public.mikeyang7789.workers.dev/openapi.json)
-- [Remote MCP endpoint](https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp) — **LIVE / public MCP SDK verified**, Streamable HTTP, 3 tools.
+- [MPP-compatible API origin](https://mpp.cnevidence.com) · [MPP OpenAPI](https://mpp.cnevidence.com/openapi.json)
+- [Remote MCP endpoint](https://mcp.cnevidence.com/mcp) — **LIVE / public MCP SDK verified**, Streamable HTTP, 3 tools.
 - [Glama Connector](https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence) — **LIVE / Healthy / 3 tools**.
-- [Official MCP Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence) — **active**, version **0.1.0**; server name: `dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence`.
-- [MPPScan listing](https://mppscan.com/server/10e814be2d90b2566a8df027a63795b0a8142e279327cf6dbd9302a241d7aa45) — **LIVE**.
+- [Official MCP Registry record](https://registry.modelcontextprotocol.io/v0.1/servers?search=cn-evidence) — **active**, version **0.1.1**; server name: `dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence`.
+- [MPPScan listing](https://mppscan.com/server/7c16491831a2c807c38cf2b2529d6f9f09e3a97e082d028d7cdeb129b950beb1) — **LIVE**.
 - [GitHub Pages documentation](https://yangchunhong3000.github.io/cn-evidence-public-docs/) — **LIVE**.
 
 **Integration status updated 2026-09-10:** Remote MCP is live and public MCP SDK verification has passed. The three tools are `resolve_china_company`, `get_china_supplier_evidence_basic`, and `get_china_supplier_evidence_full`. Resolution is free; Basic and Full remain paid tools requiring explicit spending authorization. Directory publication does not guarantee natural-language discovery by every agent or search engine.
@@ -108,6 +108,16 @@ The MPP origin is a separate adapter advertising MPP and x402. Inspect its live 
 | Recipient | `0x3aEDB825B264e82676A42B1a6d12EA253c0Ce852` |
 
 Always validate the live challenge before signing. Documentation checks do not prove a new settlement or a seller balance change.
+
+## Legacy / compatibility endpoints
+
+Use `https://api.cnevidence.com`, `https://mcp.cnevidence.com/mcp`, and `https://mpp.cnevidence.com` for new integrations. The previous endpoints remain available for compatibility only; their metadata may point to the canonical domains:
+
+- API: `https://cn-evidence-agent402-public.mikeyang7789.workers.dev`
+- MCP: `https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp`
+- MPP: `https://cn-evidence-mpp-public.mikeyang7789.workers.dev`
+
+Domain links updated 2026-09-12. Existing directory identities are retained; a directory may still show a legacy URL while its migration is pending.
 
 ## About this repository
 

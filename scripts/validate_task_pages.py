@@ -8,8 +8,8 @@ import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1];DOCS=ROOT/'docs'
 BASE='https://yangchunhong3000.github.io/cn-evidence-public-docs/'
-API='https://cn-evidence-agent402-public.mikeyang7789.workers.dev/openapi.json'
-MCP='https://cn-evidence-mcp-public.mikeyang7789.workers.dev/mcp'
+API='https://api.cnevidence.com/openapi.json'
+MCP='https://mcp.cnevidence.com/mcp'
 PATHS=['china-supplier-verification/','china-government-procurement-evidence/','china-company-regulatory-evidence/',
        'zh/china-supplier-verification/','zh/government-procurement-evidence/','zh/regulatory-evidence/']
 
