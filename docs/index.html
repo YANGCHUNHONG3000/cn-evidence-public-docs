@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CN Evidence — China Supplier Due Diligence API | x402, No API Key</title>
-  <meta name="description" content="China supplier verification for AI agents: company identity, USCC, government procurement awards, regulatory history and provenance. Basic $0.002, Full $0.01 USDC via x402. Configured datasets only; no API key.">
+  <meta name="description" content="Verify a Chinese supplier before procurement or payment: company identity/USCC, government procurement records, regulatory history and provenance. $0.002 Basic, $0.01 Full. Configured official/open datasets; no API key.">
   <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">
   <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">
   <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">
@@ -18,13 +18,14 @@
   <div class="hero">
     <p class="eyebrow">China supplier evidence · Built for agents</p>
     <h1>Verify the company.<br>Keep the evidence.</h1>
-    <p class="lead">China supplier due diligence through a machine-readable API: company identity and USCC, government procurement awards, regulatory history and source provenance.</p>
+    <p class="lead">Verify a Chinese supplier before procurement or payment: company identity and USCC, government procurement awards, regulatory history and source provenance. Machine-readable evidence for China supplier due diligence.</p>
     <p>No signup. No API key. Pay per call with <strong>x402 · Base USDC</strong>.</p>
     <div class="actions"><a class="button" href="https://api.cnevidence.com/openapi.json">Read OpenAPI</a><a class="button secondary" href="https://api.cnevidence.com/.well-known/cn-evidence/examples/full.json">Inspect a free Full example</a></div>
     <p class="scope"><strong>Know the scope.</strong> Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness. Awards are not proof of contract performance.</p>
   </div>
   <section id="use-cases" aria-labelledby="use-cases-title">
     <h2 id="use-cases-title">Use cases</h2>
+    <p>Before supplier onboarding, an order or a deposit, confirm the intended legal entity and inspect covered procurement and regulatory records. Use $0.002 Basic screening for summaries or $0.01 Full evidence-supported due diligence for detailed rows when available. Preserve coverage and ambiguous matches; this is not factory/trader identification, fraud scoring, bank-account verification or a guarantee that payment is safe.</p>
     <ul class="links"><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">Verify a Chinese Supplier</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">Check Government Procurement Evidence</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">Review Regulatory Evidence</a></li></ul>
   </section>
   <section id="tools" aria-labelledby="tools-title">
@@ -49,7 +50,7 @@
   </section>
   <section id="integrate" aria-labelledby="integrate-title">
     <h2 id="integrate-title">Start with an unsigned request</h2>
-    <p>Canonical origin: <a href="https://api.cnevidence.com">cn-evidence-agent402-public.mikeyang7789.workers.dev</a></p>
+    <p>Canonical origin: <a href="https://api.cnevidence.com">api.cnevidence.com</a></p>
     <pre><code>curl -i -X POST \
   'https://api.cnevidence.com/x402/cn/supplier/evidence' \
   -H 'Content-Type: application/json' \

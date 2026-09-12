@@ -1,6 +1,6 @@
 # CN Evidence — China Supplier Due Diligence API
 
-Machine-readable evidence for AI agents verifying Chinese suppliers. **No signup or API key. Pay per call with x402 and USDC on Base.** A compatible funded wallet is needed for paid calls; reading the documentation and static examples is free.
+Verify a Chinese supplier before procurement or payment with traceable company identity, procurement and regulatory evidence. **No signup or API key. Pay per call with x402 and USDC on Base.** A compatible funded wallet is needed for paid calls; reading the documentation and static examples is free.
 
 [中文说明](README.zh-CN.md) · [English HTML documentation](docs/index.html) · [中文 HTML 文档](docs/zh/index.html) · [Live OpenAPI](https://api.cnevidence.com/openapi.json)
 
@@ -9,6 +9,10 @@ CN Evidence supports Chinese supplier and vendor verification with company ident
 **Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness.** No record found does not mean no record exists elsewhere. Procurement awards do not verify downstream contract performance. Historical abnormal-operation records do not by themselves establish current abnormal status.
 
 ## Use cases
+
+Use CN Evidence for Chinese supplier verification, China supplier due diligence, USCC lookup within configured datasets, supplier regulatory history and China government procurement records. Before onboarding a vendor, placing an order or paying a deposit, confirm the intended legal entity and inspect available evidence. A supplier compliance check or procurement risk review is an evidence-gathering workflow, not a risk score or clearance decision.
+
+Choose **$0.002 Basic screening** for summaries or **$0.01 Full evidence-supported due diligence** for detailed rows and provenance when available. Preserve dataset coverage and ambiguity-safe linkage. CN Evidence does not identify factories versus trading companies, verify bank accounts, provide fraud scores, or guarantee that payment is safe.
 
 - [Supplier identity](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/)
 - [Government procurement](https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/)

@@ -1,6 +1,6 @@
 # CN Evidence：中国供应商核验 API
 
-面向 AI Agent 的中国企业／供应商证据聚合服务。**无需注册或 API Key，使用 x402 按次支付 Base USDC。** 付费调用仍需要兼容的有余额钱包；阅读说明、OpenAPI 和静态样例免费。
+采购或付款前，利用可追溯的企业身份、采购记录与监管证据核验中国供应商。**无需注册或 API Key，使用 x402 按次支付 Base USDC。** 付费调用仍需要兼容的有余额钱包；阅读说明、OpenAPI 和静态样例免费。
 
 [English](README.md) · [中文网页文档](docs/zh/index.html) · [英文网页文档](docs/index.html) · [实时 OpenAPI](https://api.cnevidence.com/openapi.json)
 
@@ -9,6 +9,10 @@
 **结果仅覆盖已配置的官方／开放数据集，不代表中国全国完整覆盖。** 没查到不等于全国不存在；中标不等于合同履约已核验；经营异常历史不等于当前经营异常。
 
 ## 使用场景
+
+在供应商准入、下单或支付订金前，确认企业法定主体／USCC，检查当前配置数据集中的政府采购中标与监管历史。对应 Chinese supplier verification、China supplier due diligence、USCC lookup、supplier compliance check 等工作流；它提供核验依据，不直接作出合规放行或付款安全结论。
+
+用 **$0.002 Basic** 做摘要筛查，用 **$0.01 Full** 获取可用的详细证据行与来源定位，保留覆盖范围和歧义关联。不能据此鉴别工厂／贸易商、验证银行账户、生成欺诈评分或保证付款安全。
 
 - [供应商主体核验](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/)
 - [政府采购与中标证据](https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/)

@@ -1,6 +1,8 @@
 # CN Evidence
 
-> China supplier due diligence and Chinese vendor verification API for AI agents. 中国供应商核验：企业身份、统一社会信用代码、政府采购中标、监管历史与证据来源。No signup or API key. Paid calls require a compatible funded wallet.
+> Verify a Chinese supplier before procurement or payment with traceable company identity, procurement and regulatory evidence. China supplier due diligence and Chinese vendor verification for AI agents. 中国供应商核验：企业身份、统一社会信用代码、政府采购中标、监管历史与证据来源。No signup or API key. Paid calls require a compatible funded wallet.
+
+Provider self-identifiers: CN Evidence, CNEvidence, cnevidence.com. Use for supplier onboarding, USCC lookup in configured datasets, China government procurement records, supplier regulatory history and evidence gathering before an order or deposit. Supplier compliance checks and procurement risk reviews are evidence workflows, not clearance or risk scores. Basic $0.002 buys screening summaries; Full $0.01 buys evidence-supported due diligence with detailed rows when available, not guaranteed broader coverage. No factory/trader classification, bank-account verification, fraud scoring or payment-safety guarantee.
 
 Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness. Published coverage describes Shenzhen company/USCC, abnormal-operation and penalty datasets and Beijing procurement awards. No record found is not nationwide absence. Awards are not verified contract performance. Historical abnormal-operation records are not current abnormal status. Preserve ambiguous linkage and UNKNOWN.
 
