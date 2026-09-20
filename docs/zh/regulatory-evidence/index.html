@@ -1,75 +1,43 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>行政处罚与监管证据 API｜中国企业尽调、供应商合规与证据来源</title>
-  <meta name="description" content="企业尽调中区分行政处罚、监管历史和当前合规结论。通过 MCP 查看配置数据中的监管摘要及来源证据，保留处罚机关等实际字段，不把历史记录自动解释为当前不合格。">
-  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/">
-  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">
-  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/regulatory-evidence/">
-  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">
-  <link rel="stylesheet" href="../../styles.css">
-</head>
-<body>
-<a class="skip" href="#main">跳至正文</a>
-<header><nav aria-label="主导航"><a class="brand" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">CN EVIDENCE</a><div class="nav-links"><a href="#workflow">核验步骤</a><a href="#choose">选择工具</a><a href="#example">示例结构</a><a href="#limits">来源边界</a><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/" lang="en">English</a></div></nav></header>
-<main id="main">
-  <div class="hero">
-    <p class="eyebrow">使用场景 · 行政处罚与监管证据</p>
-    <h1>评估供应商合规前，先看监管记录的原文与时间</h1>
-    <p class="lead">企业风险评估需要有依据的事实，也需要保留不知道的部分。单条监管记录、同名匹配或历史处罚，都不应直接变成自动拒绝供应商的结论。</p>
-    <div class="actions"><a class="button" href="https://api.cnevidence.com/openapi.json">查看 OpenAPI</a><a class="button secondary" href="https://mcp.cnevidence.com/mcp">连接 Remote MCP</a></div>
-    <p class="note">Remote MCP 是供客户端配置的 Streamable HTTP 端点，不是网页查询表单。</p>
-  </div>
-  <section id="workflow" aria-labelledby="workflow-title">
-    <h2 id="workflow-title">把处罚记录、监管流程和当前结论分开</h2>
-    <p>行政处罚是监管记录的一类；经营异常流程记录并不必然是一项处罚决定。开展供应商合规核验时，应先读记录类型、处理结果和时间，再决定它是否与审批规则有关。</p>
-<p class="warning"><strong>存在历史处罚记录 ≠ 自动判定当前不合格。</strong>历史流程记录也不能自动说明当前经营异常。若来源没有明确确认当前状态，应保留 <code>UNKNOWN</code>，不能用猜测填满结论。</p>
-<ol><li>先核对企业主体。同名处罚记录在关联依据不足时应保持待确认，不自动绑定。</li><li>保留证据来源、数据集定位、<code>checked_at</code> 和处理状态。原始记录确有处罚机关、决定文号或日期时再引用，不要求模型补齐缺失字段。</li><li>由你的 Agent 按审批政策处理已确认事实：需要时核验更新来源、补充材料或交给人工复核，而不是让聚合结果替代最终企业尽调判断。</li></ol>
-<p>CN Evidence 是独立的证据聚合服务，不是政府运营的 API，不自动给企业贴“高风险”标签，也不出具无处罚或合规证明。</p>
-  </section>
-  <section id="choose" aria-labelledby="choose-title">
-    <h2 id="choose-title">按这次任务选择证据深度</h2>
-    <div class="table-wrap"><table><caption>免费解析与按次付费工具</caption><thead><tr><th scope="col">工具</th><th scope="col">价格</th><th scope="col">何时使用</th></tr></thead><tbody>
-      <tr><th scope="row"><code>resolve_china_company</code></th><td>免费 / Free</td><td>按 company 名称解析主体并检查歧义；多个候选时先取得准确 USCC，再使用付费工具。</td></tr>
-      <tr><th scope="row"><code>get_china_supplier_evidence_basic</code></th><td>Basic $0.002 USDC</td><td>日常筛查可先用 Basic 查看监管摘要、来源覆盖和关联状态。确认数为零不等于全国无处罚。</td></tr>
-      <tr><th scope="row"><code>get_china_supplier_evidence_full</code></th><td>Full $0.01 USDC</td><td>审查具体记录、解释处理状态或保留审计依据时选 Full。详细证据行可能是更广义的监管历史，不一定是处罚，需结合 type 与 disposition 阅读。</td></tr>
-    </tbody></table></div>
-    <p>无需注册，无需 API Key，无需预充值账户。 <strong>x402 · Base USDC</strong>. 付费调用仍需要兼容且有余额的钱包与明确支出授权。</p>
-    <p>Full 的 include_evidence 默认 true；evidence_limit 为 0–100 的整数。记录是否存在及返回多少，以来源覆盖和响应中的 evidence_meta 为准。</p>
-  </section>
-  <section id="example" aria-labelledby="example-title">
-    <h2 id="example-title">示例结构，不是实时事实</h2>
-    <p>示例结构：已有静态监管历史样例的字段投影，已移除所有企业信息。NOT_ENTERED 不是当前经营异常或处罚结论。本段没有发起实时查询。</p>
-    <pre><code data-example="regulatory">{
-  &quot;type&quot;: &quot;ABNORMAL_OPERATION_DATASET_RECORD&quot;,
-  &quot;source&quot;: &quot;Shenzhen Government Open Data&quot;,
-  &quot;dataset&quot;: &quot;经营异常名录&quot;,
-  &quot;dataset_id&quot;: &quot;1137936299&quot;,
-  &quot;checked_at&quot;: &quot;2026-09-08T19:30:41Z&quot;,
-  &quot;record_disposition&quot;: &quot;NOT_ENTERED&quot;,
-  &quot;indicates_abnormal_listing&quot;: false,
-  &quot;negative_signal&quot;: false,
-  &quot;current_status_confirmed&quot;: false
-}</code></pre>
-    <p class="scope">静态说明 / example；not_live_query。它只是 schema 摘录或来源字段投影，不是完整成功响应，不能用来证明任何企业的当前情况。</p>
-    <p><a href="https://api.cnevidence.com/.well-known/cn-evidence/examples/full.json">查看原始免费静态样例</a> · <a href="https://api.cnevidence.com/openapi.json">核对完整 schema</a></p>
-  </section>
-  <section id="limits" aria-labelledby="limits-title">
-    <h2 id="limits-title">保留来源范围，不放大结论</h2>
-    <p>结果仅覆盖当前已配置的官方/开放数据集，不应理解为全国范围完整覆盖。当前文档描述的地域数据不能扩展为全国监管库。checked_at 不代表每条上游记录刚刚更新；应同时保留历史记录日期、来源限制与当前状态的不确定性。</p>
-    <p class="scope">结果仅覆盖当前已配置的官方/开放数据集，不应理解为全国范围完整覆盖。</p>
-  </section>
-  <section id="integrate" aria-labelledby="integrate-title">
-    <h2 id="integrate-title">接入现有服务</h2>
-    <p>Remote MCP: <a href="https://mcp.cnevidence.com/mcp">https://mcp.cnevidence.com/mcp</a></p>
-    <ul class="links"><li><a href="https://api.cnevidence.com/openapi.json">查看 OpenAPI</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/#tools">免费 Resolver 使用说明</a></li><li><a href="https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence">查看 Glama</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">查看 GitHub</a></li></ul>
-    <h3>相关任务</h3>
-    <ul><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/">供应商主体核验</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/government-procurement-evidence/">政府采购与中标证据</a></li></ul>
-    <p><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/">返回首页与使用场景</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/" lang="en">English version</a></p>
-  </section>
-</main>
-<footer><p>CN Evidence · 公共文档与静态示例，不公开私有实现或数据库。</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">文档许可</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/llms.txt">llms.txt</a> · 使用前检查实时 API 契约。</p></footer>
-</body>
-</html>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CN Evidence — Jinghai API v2</title><meta name="description" content="Jinghai supplier data via x402 and MCP. Basic 0.032 USDC, Full 0.093 USDC."><style>body{max-width:900px;margin:40px auto;padding:20px;font:17px/1.7 system-ui;color:#182638}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}a{color:#0656a3}</style><h1>CN Evidence · 鲸海数据 v2</h1><p><a href="https://api.cnevidence.com/openapi.json">Live OpenAPI / 实时接口文档</a> · <a href="https://api.cnevidence.com/.well-known/agent.json">Agent manifest</a></p><pre># CN Evidence — Jinghai supplier data API (v2)
+
+CN Evidence now uses Jinghai Data (鲸海数据) as its upstream. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
+
+## Pricing and coverage
+
+| Package | USDC per successful report | Included modules |
+| --- | --- | --- |
+| Basic | 0.032 | Registration, operating abnormalities, administrative penalties |
+| Full | 0.093 | Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications, customs |
+
+One interface can return many fields and records: Full means nine modules, not nine fields. Each list is limited to its first page, up to ten records. Serious violations, enforcement and dishonesty use the current-status option. No automatic historical queries, pagination or retries.
+
+Upstream nominal costs are CNY 0.15 / 0.45. Prices use a fixed budgeting assumption of 7 CNY/USDC and upward rounding; this is not a live FX quote. Trial credits do not lower the published retail prices.
+
+## Existing entrypoints
+
+- [x402 API](https://api.cnevidence.com)
+- [Live OpenAPI](https://api.cnevidence.com/openapi.json)
+- [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)
+- [x402 discovery](https://api.cnevidence.com/.well-known/x402)
+- [Remote MCP](https://mcp.cnevidence.com/mcp)
+
+Basic: GET /x402/cn/supplier/evidence/basic?uscc=YOUR_USCC  
+Full: POST /x402/cn/supplier/evidence with JSON {"uscc":"YOUR_USCC"}  
+Alternatively supply the exact Chinese legal company name as "company".
+
+MCP tools: get_china_supplier_evidence_basic (query) and get_china_supplier_evidence_full (request). Both accept an identity object containing company or uscc.
+
+Payment: x402, USDC on Base. Unsigned requests return payment requirements without querying Jinghai. A funded compatible wallet and explicit spending authorization are needed to buy a report. Native MPP is temporarily paused. The old the402 webhook is paused pending repricing; use the canonical x402/MCP entrypoints.
+
+## Response and limitations
+
+Schema v2 returns schema_version, request_id, tier, provider, queried_at, entity, modules, coverage, usage and limitations. Each module describes its status, data/records and paging uncertainty. Unselected modules are marked not_requested; no_records means only that this query returned no records.
+
+Free entity resolution is retired: the old free route/tool returns a capability notice, not a database lookup. Static examples are schema guides, not live supplier facts. Procurement award history is NOT included in these nine interfaces. Legacy include_evidence/evidence_limit options do not expand coverage; package limits apply.
+
+Data is attributed to Jinghai and is subject to upstream scope and timeliness. Absence of records is not proof of no risk. No nationwide completeness, fraud score, payment-safety guarantee, bank verification or legal conclusion is provided.
+
+## 中文摘要
+
+上游已切换为鲸海。Basic 每次 0.032 USDC，包含工商、经营异常、行政处罚；Full 每次 0.093 USDC，另含严重违法、被执行、失信、破产、资质、海关，共九个模块。每个列表仅首页、最多十条；不含政府采购历史，不自动翻页或补查历史。旧域名及工具名保留；免费实体检索、原生 MPP 和旧 the402 回调暂不提供原服务。没有记录不代表没有风险。以实时 OpenAPI 和支付报价为准。
+</pre></html>

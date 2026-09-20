@@ -1,91 +1,43 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>China Supplier Verification API for AI Agents | USCC, MCP &amp; x402</title>
-  <meta name="description" content="China supplier verification for AI agents: resolve company identity and USCC, then inspect supplier evidence with provenance via Remote MCP and x402 on Base USDC.">
-  <link rel="canonical" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">
-  <link rel="alternate" hreflang="en" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">
-  <link rel="alternate" hreflang="zh-CN" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/">
-  <link rel="alternate" hreflang="x-default" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-supplier-verification/">
-  <link rel="stylesheet" href="../styles.css">
-</head>
-<body>
-<a class="skip" href="#main">Skip to content</a>
-<header><nav aria-label="Main navigation"><a class="brand" href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">CN EVIDENCE</a><div class="nav-links"><a href="#workflow">Workflow</a><a href="#choose">Choose a tool</a><a href="#example">Example structure</a><a href="#limits">Source limits</a><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/" lang="zh-CN">中文</a></div></nav></header>
-<main id="main">
-  <div class="hero">
-    <p class="eyebrow">Use case · Supplier identity</p>
-    <h1>Verify a Chinese Supplier Before Your Agent Trusts It</h1>
-    <p class="lead">A supplier name is a starting point, not a confirmed legal entity. Use China supplier verification to establish who your agent is dealing with before paying for a deeper report.</p>
-    <div class="actions"><a class="button" href="https://api.cnevidence.com/openapi.json">Inspect OpenAPI</a><a class="button secondary" href="https://mcp.cnevidence.com/mcp">Connect Remote MCP</a></div>
-    <p class="note">Remote MCP is a Streamable HTTP endpoint for client configuration, not a browser search form.</p>
-  </div>
-  <section id="workflow" aria-labelledby="workflow-title">
-    <h2 id="workflow-title">Resolve the legal entity before you buy evidence</h2>
-    <p>Chinese supplier due diligence starts with company identity. A trading name, English translation or shortened name can point to a different business from the legal name on a contract. Even an exact-looking name can have multiple candidates in the configured sources. Chinese vendor verification should preserve that ambiguity, not silently choose the first result.</p>
-<p>The Unified Social Credit Code (USCC) is the enterprise identifier used to distinguish the intended legal entity. An 18-character value passing a format check is not, by itself, proof that it belongs to your supplier. Compare the code and legal Chinese name against the intended counterparty.</p>
-<ol><li>Use <code>resolve_china_company</code> with a Chinese <code>company</code> name. The free resolver returns identity candidates within configured coverage; it does not accept a <code>uscc</code> input.</li><li>If multiple candidates remain, ask the counterparty for its exact legal name and USCC. Do not attach another entity’s awards or regulatory records.</li><li>Pass a confirmed <code>uscc</code> to Basic or Full. Keep the returned linkage state and unknown values in your AI agent’s decision process.</li></ol>
-  </section>
-  <section id="choose" aria-labelledby="choose-title">
-    <h2 id="choose-title">Choose evidence depth for this task</h2>
-    <div class="table-wrap"><table><caption>Free resolution and pay-per-call tools</caption><thead><tr><th scope="col">Tool</th><th scope="col">Price</th><th scope="col">When to use it</th></tr></thead><tbody>
-      <tr><th scope="row"><code>resolve_china_company</code></th><td>Free</td><td>Resolve the company name and inspect ambiguity first; obtain the intended USCC before using paid tools when multiple candidates remain.</td></tr>
-      <tr><th scope="row"><code>get_china_supplier_evidence_basic</code></th><td>Basic $0.002 USDC</td><td>Use Basic for low-cost onboarding screening: company identity, procurement and regulatory summaries, linkage and source scope, without detailed evidence rows.</td></tr>
-      <tr><th scope="row"><code>get_china_supplier_evidence_full</code></th><td>Full $0.01 USDC</td><td>Use Full when approval needs the records behind a summary. Request available evidence rows and preserve provenance; a paid response is not an identity or compliance certification.</td></tr>
-    </tbody></table></div>
-    <p>No signup. No API key. No prepaid account. <strong>x402 · Base USDC</strong>. Paid calls still require a compatible funded wallet and explicit spending authorization.</p>
-    <p>For Full, include_evidence defaults to true; evidence_limit is an integer from 0 to 100. Available rows depend on source coverage; check evidence_meta rather than assuming completeness.</p>
-  </section>
-  <section id="example" aria-labelledby="example-title">
-    <h2 id="example-title">Example structure, not live facts</h2>
-    <p>Example structure: a reduced excerpt of the public Full request schema, not a company result or a complete API request. No real supplier facts are asserted. Basic/Full accept company or uscc; the free resolver requires company.</p>
-    <pre><code data-example="identity">{
-  &quot;type&quot;: &quot;object&quot;,
-  &quot;properties&quot;: {
-    &quot;company&quot;: {
-      &quot;type&quot;: &quot;string&quot;,
-      &quot;minLength&quot;: 2,
-      &quot;maxLength&quot;: 200
-    },
-    &quot;uscc&quot;: {
-      &quot;type&quot;: &quot;string&quot;,
-      &quot;minLength&quot;: 18,
-      &quot;maxLength&quot;: 18,
-      &quot;pattern&quot;: &quot;^[0-9A-Z]{18}$&quot;
-    }
-  },
-  &quot;anyOf&quot;: [
-    {
-      &quot;required&quot;: [
-        &quot;company&quot;
-      ]
-    },
-    {
-      &quot;required&quot;: [
-        &quot;uscc&quot;
-      ]
-    }
-  ]
-}</code></pre>
-    <p class="scope">Static example / not_live_query. This is a schema excerpt or field projection, not a complete success response or evidence of any supplier’s current state.</p>
-    <p><a href="https://api.cnevidence.com/.well-known/cn-evidence/examples/resolve.json">Inspect the original free static example</a> · <a href="https://api.cnevidence.com/openapi.json">Inspect the complete schema</a></p>
-  </section>
-  <section id="limits" aria-labelledby="limits-title">
-    <h2 id="limits-title">Keep source scope attached to the conclusion</h2>
-    <p>A dataset locator identifies a source dataset; record identifiers and source-file locators, when returned, provide finer traceability. Keep both the evidence and its provenance. A match within configured coverage does not establish nationwide registration completeness or guarantee a supplier’s reliability.</p>
-    <p class="scope">Results are limited to configured official/open datasets and must not be interpreted as nationwide completeness.</p>
-  </section>
-  <section id="integrate" aria-labelledby="integrate-title">
-    <h2 id="integrate-title">Use the existing service</h2>
-    <p>Remote MCP: <a href="https://mcp.cnevidence.com/mcp">https://mcp.cnevidence.com/mcp</a></p>
-    <ul class="links"><li><a href="https://api.cnevidence.com/openapi.json">Inspect OpenAPI</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/#tools">Try free resolver documentation</a></li><li><a href="https://glama.ai/mcp/connectors/dev.workers.mikeyang7789.cn-evidence-mcp-public/cn-evidence-china-supplier-due-diligence">View Glama</a></li><li><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs">View GitHub</a></li></ul>
-    <h3>Related tasks</h3>
-    <ul><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-government-procurement-evidence/">Government procurement</a></li><li><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/china-company-regulatory-evidence/">Regulatory evidence</a></li></ul>
-    <p><a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/">Back to homepage and use cases</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/zh/china-supplier-verification/" lang="zh-CN">中文版</a></p>
-  </section>
-</main>
-<footer><p>CN Evidence · Public documentation and static examples. No private implementation or database is published here.</p><p><a href="https://github.com/YANGCHUNHONG3000/cn-evidence-public-docs/blob/main/LICENSE">Documentation license</a> · <a href="https://yangchunhong3000.github.io/cn-evidence-public-docs/llms.txt">llms.txt</a> · Read the live API contract before use.</p></footer>
-</body>
-</html>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CN Evidence — Jinghai API v2</title><meta name="description" content="Jinghai supplier data via x402 and MCP. Basic 0.032 USDC, Full 0.093 USDC."><style>body{max-width:900px;margin:40px auto;padding:20px;font:17px/1.7 system-ui;color:#182638}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}a{color:#0656a3}</style><h1>CN Evidence · 鲸海数据 v2</h1><p><a href="https://api.cnevidence.com/openapi.json">Live OpenAPI / 实时接口文档</a> · <a href="https://api.cnevidence.com/.well-known/agent.json">Agent manifest</a></p><pre># CN Evidence — Jinghai supplier data API (v2)
+
+CN Evidence now uses Jinghai Data (鲸海数据) as its upstream. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
+
+## Pricing and coverage
+
+| Package | USDC per successful report | Included modules |
+| --- | --- | --- |
+| Basic | 0.032 | Registration, operating abnormalities, administrative penalties |
+| Full | 0.093 | Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications, customs |
+
+One interface can return many fields and records: Full means nine modules, not nine fields. Each list is limited to its first page, up to ten records. Serious violations, enforcement and dishonesty use the current-status option. No automatic historical queries, pagination or retries.
+
+Upstream nominal costs are CNY 0.15 / 0.45. Prices use a fixed budgeting assumption of 7 CNY/USDC and upward rounding; this is not a live FX quote. Trial credits do not lower the published retail prices.
+
+## Existing entrypoints
+
+- [x402 API](https://api.cnevidence.com)
+- [Live OpenAPI](https://api.cnevidence.com/openapi.json)
+- [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)
+- [x402 discovery](https://api.cnevidence.com/.well-known/x402)
+- [Remote MCP](https://mcp.cnevidence.com/mcp)
+
+Basic: GET /x402/cn/supplier/evidence/basic?uscc=YOUR_USCC  
+Full: POST /x402/cn/supplier/evidence with JSON {"uscc":"YOUR_USCC"}  
+Alternatively supply the exact Chinese legal company name as "company".
+
+MCP tools: get_china_supplier_evidence_basic (query) and get_china_supplier_evidence_full (request). Both accept an identity object containing company or uscc.
+
+Payment: x402, USDC on Base. Unsigned requests return payment requirements without querying Jinghai. A funded compatible wallet and explicit spending authorization are needed to buy a report. Native MPP is temporarily paused. The old the402 webhook is paused pending repricing; use the canonical x402/MCP entrypoints.
+
+## Response and limitations
+
+Schema v2 returns schema_version, request_id, tier, provider, queried_at, entity, modules, coverage, usage and limitations. Each module describes its status, data/records and paging uncertainty. Unselected modules are marked not_requested; no_records means only that this query returned no records.
+
+Free entity resolution is retired: the old free route/tool returns a capability notice, not a database lookup. Static examples are schema guides, not live supplier facts. Procurement award history is NOT included in these nine interfaces. Legacy include_evidence/evidence_limit options do not expand coverage; package limits apply.
+
+Data is attributed to Jinghai and is subject to upstream scope and timeliness. Absence of records is not proof of no risk. No nationwide completeness, fraud score, payment-safety guarantee, bank verification or legal conclusion is provided.
+
+## 中文摘要
+
+上游已切换为鲸海。Basic 每次 0.032 USDC，包含工商、经营异常、行政处罚；Full 每次 0.093 USDC，另含严重违法、被执行、失信、破产、资质、海关，共九个模块。每个列表仅首页、最多十条；不含政府采购历史，不自动翻页或补查历史。旧域名及工具名保留；免费实体检索、原生 MPP 和旧 the402 回调暂不提供原服务。没有记录不代表没有风险。以实时 OpenAPI 和支付报价为准。
+</pre></html>
