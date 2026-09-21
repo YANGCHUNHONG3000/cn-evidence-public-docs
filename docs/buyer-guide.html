@@ -30,6 +30,11 @@
 <tr><td>5xx / timeout</td><td>Record time, request ID if available and sanitized error. If payment may already have been submitted, reconcile first rather than blindly buying again. Never share signatures or private keys in diagnostics.</td></tr></table>
 <p>上述错误数字是请求结果，不是客户数量。连接探测、页面抓取和付款查询必须分开统计。</p>
 <h2>Identity first / 先确认企业身份</h2>
+<p><strong>New: free input preflight, not a lookup.</strong> Before purchasing, POST a JSON object with <code>company</code> or <code>uscc</code> to <code>https://api.cnevidence.com/free/cn/identity/preflight</code>. It checks local format and prepares Basic/Full HTTP and MCP request shapes. It makes no upstream call, needs no wallet, and cannot verify company existence, USCC checksum, name/code agreement or absence of risk.</p>
+<p>Alternatively call the existing free MCP tool <code>resolve_china_company</code> with <code>company</code> and/or <code>uscc</code>. Despite its legacy name, it does not resolve entities. An English-only brand/name prompts you to obtain a Chinese legal name or USCC; it is never translated into an assumed company.</p>
+<p>Download <a href="preflight-input.json">the fictional diagnostic input</a> and run:</p>
+<pre>curl.exe "https://api.cnevidence.com/free/cn/identity/preflight" -H "Content-Type: application/json" -H "X-CN-Traffic: internal_test" --data-binary "@preflight-input.json"</pre>
+<p>Expected for this English-only example: <code>input_ready: false</code> and guidance to obtain the legal identifier. A correctly formatted Chinese name/code can return <code>input_ready: true</code>, but always <code>identity_verified: false</code>. This is not permission to pay. Confirm the entity separately; do not auto-purchase just because preflight passes. Omit the internal-test header for real user preparation; do not upload identity documents or unrelated personal information.</p>
 <ul><li>Supply either <code>company</code>: exact Chinese registered legal name, or <code>uscc</code>: 18-character Unified Social Credit Code.</li>
 <li>可从用户提供的营业执照、合同、供应商官网提取线索；核对法律主体，不要把品牌、英文译名或近似名称当作已确认企业。OCR 结果也需要核对。</li>
 <li>If multiple candidates or conflicting identifiers exist, ask for confirmation before paying. No fuzzy English-name search or free entity-resolution lookup is provided.</li>
@@ -52,6 +57,9 @@ npx agentcash@latest fetch "https://api.cnevidence.com/x402/cn/supplier/evidence
 <h2>What the sample means</h2>
 <p>The free JSON is hand-authored fictional schema guidance, not a live API response. It performs no query. Each selected list is page 1, at most 10 records; no automatic history or pagination. “No records” is not proof of no risk. Nine modules are not nine fields, and this is not a complete due-diligence or supplier-safety judgment.</p>
 <p>本示例完全虚构，不能作为真实企业证据。不要把示例下载、工具发现或内部测试算成客户成交。</p>
+<h2>Delivery and failure readiness / 交付与异常处理</h2>
+<p>Local mocked tests cover unsigned access, mismatched payment terms, rejected verification, upstream failure, settlement failure and nonce reuse. Free public preflight and MCP discovery have been checked. These are not funded end-to-end acceptance tests and do not certify a third-party payment client.</p>
+<ul><li>If upstream retrieval fails before settlement, the HTTP gateway does not proceed to settlement. It does not return the failure as a clean/no-risk report.</li><li>If settlement fails or its status is uncertain, do not submit a fresh payment automatically. Reconcile the payment first; a timeout is not proof that no money moved.</li><li>A shared nonce guard prevents reusing an attempted authorization. It is not a paid-report recovery or refund service. Automatic delivery recovery after payment is not currently promised.</li><li>For assistance provide UTC time, endpoint/tier, a request ID if returned, and a sanitized error. Never send wallet private keys, payment signatures, API keys or identity documents.</li></ul>
 <h2>References</h2>
 <p><a href="https://docs.x402.org/guides/mcp-server-with-x402">Official x402 bridge and spending-policy guide</a> · <a href="https://github.com/Merit-Systems/agentcash-skills/blob/master/skills/agentcash/SKILL.md">AgentCash documentation</a>. Reference examples may use test networks; this service uses Base mainnet. No funded client test was performed for this guide.</p>
 </html>

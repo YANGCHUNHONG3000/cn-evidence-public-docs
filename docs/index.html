@@ -36,7 +36,7 @@ Payment: x402, USDC on Base. Unsigned requests return payment requirements witho
 
 Schema v2 returns schema_version, request_id, tier, provider, queried_at, entity, modules, coverage, usage and limitations. Each module describes its status, data/records and paging uncertainty. Unselected modules are marked not_requested; no_records means only that this query returned no records.
 
-Free entity resolution is retired: the old free route/tool returns a capability notice, not a database lookup. Static examples are schema guides, not live supplier facts. Procurement award history is NOT included in these nine interfaces. Legacy include_evidence/evidence_limit options do not expand coverage; package limits apply.
+Free entity resolution is retired. The legacy free HTTP resolve route remains a capability notice; the existing resolve_china_company MCP tool now offers local input preflight only, not a database lookup. Free HTTP input preparation: POST https://api.cnevidence.com/free/cn/identity/preflight with company or uscc. input_ready does not mean verified identity; no upstream call or payment occurs. Static examples are schema guides, not live supplier facts. Procurement award history is NOT included in these nine interfaces. Legacy include_evidence/evidence_limit options do not expand coverage; package limits apply.
 
 Data availability depends on provider coverage and update schedules. Preserve any source attribution included in query results. Absence of records is not proof of no risk. No nationwide completeness, fraud score, payment-safety guarantee, bank verification or legal conclusion is provided.
 
