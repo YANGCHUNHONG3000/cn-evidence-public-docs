@@ -16,6 +16,19 @@
 <p>Read the sample and schema first. The following request only gets a quote. It has no payment signature, is marked as an internal/developer test and does not buy a report:</p>
 <pre>curl -i -H "X-CN-Traffic: internal_test" https://api.cnevidence.com/x402/cn/supplier/evidence/basic</pre>
 <p>HTTP 402 means payment is required, not server downtime. For native MCP, HTTP 200 may carry <code>result.isError=true</code> and <code>structuredContent.error="Payment Required"</code>; that is not company data or a completed purchase. Do not repeatedly retry without a valid payment client.</p>
+<h2>Free MCP connection check / 免费连接诊断</h2>
+<p>Use POST to <code>https://mcp.cnevidence.com/mcp</code> with <code>Content-Type: application/json</code> and <code>Accept: application/json, text/event-stream</code>. Prefer a current Streamable HTTP MCP SDK for the normal initialize/notification lifecycle. This stateless service also accepts the following direct tools/list diagnostic; it lists tool definitions only, not company data.</p>
+<p>Download <a href="mcp-tools-list.json">mcp-tools-list.json</a> into your current folder. On Windows PowerShell use <code>curl.exe</code> explicitly:</p>
+<pre>curl.exe -i "https://mcp.cnevidence.com/mcp" -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" -H "X-CN-Traffic: internal_test" --data-binary "@mcp-tools-list.json"</pre>
+<p>On macOS/Linux replace <code>curl.exe</code> with <code>curl</code>. Expected: HTTP 200 with three tool definitions. No wallet or company identity is needed. The internal-test header is for diagnostics only; omit it for real customer queries.</p>
+<table><tr><th>Result</th><th>Meaning and action</th></tr>
+<tr><td>406 / Client must accept application/json</td><td>The current JSON-response service rejects Accept: */*, text/html, or text/event-stream alone on POST. Send the explicit Accept header above. A browser address-bar visit is not an MCP handshake. Do not repeatedly retry unchanged requests.</td></tr>
+<tr><td>400 / JSON-RPC error</td><td>Check valid JSON, method, protocol negotiation and request shape; read the returned error. Not automatically a server outage.</td></tr>
+<tr><td>404 / 405</td><td>Check endpoint and method. MCP is /mcp; the HTTP Full report is POST, not GET. The protocols are not interchangeable.</td></tr>
+<tr><td>422 / invalid_tool_input</td><td>Check company/USCC and the nesting: Basic uses query, Full uses request. Correct identity before purchase.</td></tr>
+<tr><td>HTTP 402 or MCP Payment Required</td><td>Connection can be working; a configured payment client and explicit authorization are still required. This is not a delivered report.</td></tr>
+<tr><td>5xx / timeout</td><td>Record time, request ID if available and sanitized error. If payment may already have been submitted, reconcile first rather than blindly buying again. Never share signatures or private keys in diagnostics.</td></tr></table>
+<p>上述错误数字是请求结果，不是客户数量。连接探测、页面抓取和付款查询必须分开统计。</p>
 <h2>Identity first / 先确认企业身份</h2>
 <ul><li>Supply either <code>company</code>: exact Chinese registered legal name, or <code>uscc</code>: 18-character Unified Social Credit Code.</li>
 <li>可从用户提供的营业执照、合同、供应商官网提取线索；核对法律主体，不要把品牌、英文译名或近似名称当作已确认企业。OCR 结果也需要核对。</li>
