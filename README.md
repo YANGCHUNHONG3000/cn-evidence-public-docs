@@ -19,7 +19,9 @@ Upstream nominal costs are CNY 0.15 / 0.45. Prices use a fixed budgeting assumpt
 - [Live OpenAPI](https://api.cnevidence.com/openapi.json)
 - [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)
 - [x402 discovery](https://api.cnevidence.com/.well-known/x402)
-- [Remote MCP](https://mcp.cnevidence.com/mcp)
+- [Remote MCP — GitHub entry](https://mcp.cnevidence.com/mcp?cn_source=github)
+
+Optional attribution: clients configured from this GitHub guide can retain `?cn_source=github` on the MCP URL, or send `X-CN-Source: github` on API requests. Canonical untagged URLs remain supported. This label identifies the entry channel, not a person; automated discovery and internal tests are not counted as customers. No company query text or payment credentials are stored in traffic analytics. Removing the label does not affect service or pricing.
 
 Basic: GET /x402/cn/supplier/evidence/basic?uscc=YOUR_USCC  
 Full: POST /x402/cn/supplier/evidence with JSON {"uscc":"YOUR_USCC"}  

@@ -19,7 +19,9 @@ Upstream nominal costs are CNY 0.15 / 0.45. Prices use a fixed budgeting assumpt
 - [Live OpenAPI](https://api.cnevidence.com/openapi.json)
 - [Agent manifest](https://api.cnevidence.com/.well-known/agent.json)
 - [x402 discovery](https://api.cnevidence.com/.well-known/x402)
-- [Remote MCP](https://mcp.cnevidence.com/mcp)
+- [Remote MCP — GitHub 入口](https://mcp.cnevidence.com/mcp?cn_source=github)
+
+可选来源标记：从这份 GitHub 文档配置的客户端，可保留 MCP 地址中的 `?cn_source=github`，或在 API 请求中携带 `X-CN-Source: github`。原无标记地址仍可使用，价格和功能不变。标记用于统计入口渠道，不识别个人；目录探测和内部测试不算客户。流量统计不保存企业查询内容或支付凭证。
 
 Basic: GET /x402/cn/supplier/evidence/basic?uscc=YOUR_USCC  
 Full: POST /x402/cn/supplier/evidence with JSON {"uscc":"YOUR_USCC"}  
