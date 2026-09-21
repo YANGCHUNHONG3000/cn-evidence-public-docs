@@ -1,0 +1,26 @@
+{
+  "example": true,
+  "fictional": true,
+  "not_live_query": true,
+  "warning": "Hand-authored schema illustration only. All identifiers and company facts below are fictional placeholders, not supplier evidence.",
+  "schema_version": "2.0.0",
+  "request_id": "FICTIONAL-SAMPLE-NOT-A-TRANSACTION",
+  "tier": "basic",
+  "provider": "FICTIONAL_SAMPLE_NOT_A_PROVIDER",
+  "queried_at": null,
+  "entity": {"legal_name_cn": "虚构示例企业（不可用于查询）", "uscc": null},
+  "modules": {
+    "registration": {"api_id": "10001", "status": "ok", "data": {"companyName": "虚构示例企业（不可用于查询）"}},
+    "operating_abnormalities": {"api_id": "10021", "status": "no_records", "records": [], "has_more": null, "possibly_truncated": false},
+    "administrative_penalties": {"api_id": "10022", "status": "ok", "records": [{"example_only": true, "description": "Fictional record illustrating a list; not a real penalty."}], "has_more": null, "possibly_truncated": true},
+    "serious_violations": {"api_id": "10033", "status": "not_requested"},
+    "enforcement": {"api_id": "10034", "status": "not_requested"},
+    "dishonesty": {"api_id": "10035", "status": "not_requested"},
+    "bankruptcy": {"api_id": "10039", "status": "not_requested"},
+    "qualifications": {"api_id": "10088", "status": "not_requested"},
+    "customs": {"api_id": "10100", "status": "not_requested"}
+  },
+  "coverage": {"page_index": 1, "page_size": 10, "automatic_paging": false, "complete_due_diligence": false},
+  "usage": {"example_only": true, "upstream_attempts": 0, "list_price_cost_cny": 0, "trial_is_not_zero_economic_cost": true, "payment_made": false},
+  "limitations": ["Fictional illustration, not a contract fixture or live report.", "Actual provider field availability varies; inspect the live schema.", "Missing records do not establish absence of risk."]
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CN Evidence — Buyer setup / 接入指引</title>
+<style>body{max-width:920px;margin:32px auto;padding:20px;font:17px/1.7 system-ui;color:#182638}pre{overflow:auto;background:#f1f5f9;padding:16px}a{color:#0656a3}td,th{padding:10px;border:1px solid #ccc}table{border-collapse:collapse}</style>
+<h1>Buyer setup / 接入指引</h1>
+<p><a href="./">Home</a> · <a href="sample-report.json">Free fictional sample / 免费虚构示例</a> · <a href="https://api.cnevidence.com/openapi.json">Live API schema</a></p>
+<p><strong>Paid data, not a free MCP lookup.</strong> Connecting MCP and listing tools are not purchases. Basic costs 0.032 USDC; Full costs 0.093 USDC. Check the live quote before signing. Payment is x402 v2, exact, USDC on Base mainnet (eip155:8453), not Base Sepolia.</p>
+<p><strong>连接成功不等于能付款。</strong> 查询需要买方的钱包、Base 主网 USDC 余额和消费授权。钱包由买方保管，不要向我们、聊天窗口或公共配置提交私钥。当前没有预充值 API Key 方案；原生 MPP 暂停。</p>
+<h2>Choose your path</h2>
+<table><tr><th>Your client</th><th>What is needed</th></tr>
+<tr><td>AgentCash-enabled agent</td><td>Its wallet setup, sufficient Base USDC and owner spending approval. Use our HTTP routes. Documentation-level candidate; no funded end-to-end compatibility certification is claimed.</td></tr>
+<tr><td>Custom x402 HTTP client</td><td>x402 v2 exact/EVM signer and guarded signature/retry flow. Validate network, asset, recipient and amount against the approved operation before signing.</td></tr>
+<tr><td>x402-aware MCP client</td><td>Must interpret the tool's Payment Required result and send the SDK's MCP payment metadata. HTTP payment headers are not a substitute for MCP metadata.</td></tr>
+<tr><td>Plain remote MCP client</td><td>Can discover tools; requires an x402 payment client or local HTTP-to-MCP payment bridge to buy data. Do not assume the host supplies a wallet.</td></tr></table>
+<h2>Free inspection — no wallet needed</h2>
+<p>Read the sample and schema first. The following request only gets a quote. It has no payment signature, is marked as an internal/developer test and does not buy a report:</p>
+<pre>curl -i -H "X-CN-Traffic: internal_test" https://api.cnevidence.com/x402/cn/supplier/evidence/basic</pre>
+<p>HTTP 402 means payment is required, not server downtime. For native MCP, HTTP 200 may carry <code>result.isError=true</code> and <code>structuredContent.error="Payment Required"</code>; that is not company data or a completed purchase. Do not repeatedly retry without a valid payment client.</p>
+<h2>Identity first / 先确认企业身份</h2>
+<ul><li>Supply either <code>company</code>: exact Chinese registered legal name, or <code>uscc</code>: 18-character Unified Social Credit Code.</li>
+<li>可从用户提供的营业执照、合同、供应商官网提取线索；核对法律主体，不要把品牌、英文译名或近似名称当作已确认企业。OCR 结果也需要核对。</li>
+<li>If multiple candidates or conflicting identifiers exist, ask for confirmation before paying. No fuzzy English-name search or free entity-resolution lookup is provided.</li>
+<li>Do not upload unrelated personal details or identity documents to this API. Pass only the company identifier.</li></ul>
+<h2>Request shapes (placeholders, not purchase commands)</h2>
+<pre>Basic HTTP: GET /x402/cn/supplier/evidence/basic?uscc=YOUR_CONFIRMED_USCC
+Full HTTP: POST /x402/cn/supplier/evidence
+JSON body: {"uscc":"YOUR_CONFIRMED_USCC"}
+
+MCP endpoint: https://mcp.cnevidence.com/mcp
+Basic tools/call params:
+{"name":"get_china_supplier_evidence_basic","arguments":{"query":{"company":"CONFIRMED_CHINESE_LEGAL_NAME"}}}
+Full tools/call params:
+{"name":"get_china_supplier_evidence_full","arguments":{"request":{"company":"CONFIRMED_CHINESE_LEGAL_NAME"}}}</pre>
+<h2>AgentCash HTTP example — spending operation</h2>
+<p><strong>Only run after the owner approves the purchase and confirms the entity.</strong> These commands can spend wallet funds. Configure and review the buyer tool's controls first; the examples themselves do not enforce a cumulative budget. Do not use an unrestricted auto-paying client if you require an enforced budget.</p>
+<pre>npx agentcash@latest fetch "https://api.cnevidence.com/x402/cn/supplier/evidence/basic?uscc=YOUR_CONFIRMED_USCC"
+npx agentcash@latest fetch "https://api.cnevidence.com/x402/cn/supplier/evidence" -m POST -b '{"uscc":"YOUR_CONFIRMED_USCC"}'</pre>
+<p>For production pin a reviewed client version. For a custom SDK enforce per-call caps (Basic 0.032, Full 0.093 USDC), a separate total budget, approved destination/asset/network, and no blind retry after an uncertain payment. Save receipts securely and reconcile before purchasing again. Never accept a changed quote automatically.</p>
+<h2>What the sample means</h2>
+<p>The free JSON is hand-authored fictional schema guidance, not a live API response. It performs no query. Each selected list is page 1, at most 10 records; no automatic history or pagination. “No records” is not proof of no risk. Nine modules are not nine fields, and this is not a complete due-diligence or supplier-safety judgment.</p>
+<p>本示例完全虚构，不能作为真实企业证据。不要把示例下载、工具发现或内部测试算成客户成交。</p>
+<h2>References</h2>
+<p><a href="https://docs.x402.org/guides/mcp-server-with-x402">Official x402 bridge and spending-policy guide</a> · <a href="https://github.com/Merit-Systems/agentcash-skills/blob/master/skills/agentcash/SKILL.md">AgentCash documentation</a>. Reference examples may use test networks; this service uses Base mainnet. No funded client test was performed for this guide.</p>
+</html>

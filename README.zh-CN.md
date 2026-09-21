@@ -1,5 +1,7 @@
 # CN Evidence — China supplier information API (v2)
 
+**查询收费：只添加 MCP 地址不等于可以付款。** 买方需要 x402 v2 支付客户端、Base 主网 USDC 钱包及消费授权。[接入示例与企业身份指引](https://yangchunhong3000.github.io/cn-evidence-public-docs/buyer-guide.html) · [免费虚构示例报告（不查询真实数据）](https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.json)。目前没有预充值 API Key 服务，不支持模糊英文企业名称匹配。
+
 CN Evidence provides structured Chinese company information for supplier verification and due diligence. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
 
 ## Pricing and coverage
