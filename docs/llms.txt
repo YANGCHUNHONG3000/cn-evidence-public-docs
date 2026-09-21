@@ -1,6 +1,6 @@
-# CN Evidence — Jinghai supplier data API (v2)
+# CN Evidence — China supplier information API (v2)
 
-CN Evidence now uses Jinghai Data (鲸海数据) as its upstream. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
+CN Evidence provides structured Chinese company information for supplier verification and due diligence. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
 
 ## Pricing and coverage
 
@@ -27,7 +27,7 @@ Alternatively supply the exact Chinese legal company name as "company".
 
 MCP tools: get_china_supplier_evidence_basic (query) and get_china_supplier_evidence_full (request). Both accept an identity object containing company or uscc.
 
-Payment: x402, USDC on Base. Unsigned requests return payment requirements without querying Jinghai. A funded compatible wallet and explicit spending authorization are needed to buy a report. Native MPP is temporarily paused. The old the402 webhook is paused pending repricing; use the canonical x402/MCP entrypoints.
+Payment: x402, USDC on Base. Unsigned requests return payment requirements without querying data providers. A funded compatible wallet and explicit spending authorization are needed to buy a report. Native MPP is temporarily paused. The old the402 webhook is paused pending repricing; use the canonical x402/MCP entrypoints.
 
 ## Response and limitations
 
@@ -35,8 +35,8 @@ Schema v2 returns schema_version, request_id, tier, provider, queried_at, entity
 
 Free entity resolution is retired: the old free route/tool returns a capability notice, not a database lookup. Static examples are schema guides, not live supplier facts. Procurement award history is NOT included in these nine interfaces. Legacy include_evidence/evidence_limit options do not expand coverage; package limits apply.
 
-Data is attributed to Jinghai and is subject to upstream scope and timeliness. Absence of records is not proof of no risk. No nationwide completeness, fraud score, payment-safety guarantee, bank verification or legal conclusion is provided.
+Data availability depends on provider coverage and update schedules. Preserve any source attribution included in query results. Absence of records is not proof of no risk. No nationwide completeness, fraud score, payment-safety guarantee, bank verification or legal conclusion is provided.
 
 ## 中文摘要
 
-上游已切换为鲸海。Basic 每次 0.032 USDC，包含工商、经营异常、行政处罚；Full 每次 0.093 USDC，另含严重违法、被执行、失信、破产、资质、海关，共九个模块。每个列表仅首页、最多十条；不含政府采购历史，不自动翻页或补查历史。旧域名及工具名保留；免费实体检索、原生 MPP 和旧 the402 回调暂不提供原服务。没有记录不代表没有风险。以实时 OpenAPI 和支付报价为准。
+提供中国企业信息核验与尽调数据服务。Basic 每次 0.032 USDC，包含工商、经营异常、行政处罚；Full 每次 0.093 USDC，另含严重违法、被执行、失信、破产、资质、海关，共九个模块。每个列表仅首页、最多十条；不含政府采购历史，不自动翻页或补查历史。旧域名及工具名保留；免费实体检索、原生 MPP 和旧 the402 回调暂不提供原服务。没有记录不代表没有风险。以实时 OpenAPI 和支付报价为准。
