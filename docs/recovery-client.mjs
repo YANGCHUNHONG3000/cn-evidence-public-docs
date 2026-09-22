@@ -72,6 +72,7 @@ export async function run(args,{fetchImpl=globalThis.fetch,write=console.log}={}
   }
   // Only sanitized order metadata; never log token, request body or report.
   write(JSON.stringify({http_status:status,state:data.state??null,order_id:data.order_id??null,chain_check:data.chain_check??null,
+    restored_from_archive:data.restored_from_archive===true,refund_status:data.refund?.status??null,refund_transaction:data.refund?.transaction??null,
     report_saved:saved,new_payment_submitted:false,next_step:status===200?'Keep your private receipt.':'Do not pay again automatically. Check the guide or ask for reconciliation.'}));
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
