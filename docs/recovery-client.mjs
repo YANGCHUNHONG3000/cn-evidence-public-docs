@@ -66,7 +66,7 @@ export async function run(args,{fetchImpl=globalThis.fetch,write=console.log}={}
   if(tx)body.transaction_hash=tx;
   const {status,data}=await request(API,body,fetchImpl);
   let saved=false;
-  if(status===200&&command==='recover'){
+  if(status===200&&command==='recover'&&data.refund?.status!=='refunded_confirmed'){
     if(data.state!=='settled'||!data.report||data.new_charge!==false)throw new Error('Unexpected recovery response; no report saved.');
     await writeFile(out,JSON.stringify(data.report,null,2)+'\n',{flag:'wx',mode:0o600});saved=true;
   }
