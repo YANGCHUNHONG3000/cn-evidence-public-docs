@@ -1,6 +1,8 @@
 # CN Evidence — China supplier information API (v2)
 
-**Paid lookup:** adding the MCP URL alone does not enable payment. Buyers need an x402 v2 payment client, Base USDC wallet and spending authorization. [Buyer setup, request examples and identity guidance](https://yangchunhong3000.github.io/cn-evidence-public-docs/buyer-guide.html) · [Free fictional sample report — no live query](https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.json).
+**Evaluate the output first:** [Read a fictional supplier-check example](https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.html) — what was returned, what remains unknown, and what needs further review. No wallet, signup or live query. The explanation is documentation, not an automated supplier-safety assessment. [Inspect the matching JSON](https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.json).
+
+**Paid lookup:** adding the MCP URL alone does not enable payment. Buyers need an x402 v2 payment client, Base USDC wallet and spending authorization. [Buyer setup, request examples and identity guidance](https://yangchunhong3000.github.io/cn-evidence-public-docs/buyer-guide.html).
 
 CN Evidence provides structured Chinese company information for supplier verification and due diligence. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
 

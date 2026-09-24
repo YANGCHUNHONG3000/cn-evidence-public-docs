@@ -1,5 +1,7 @@
 # CN Evidence — China supplier information API (v2)
 
+Readable fictional supplier-check example (documentation only, not an automatic risk assessment or live query): https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.html
+
 Paid lookup: a plain MCP connection cannot purchase data without an x402 payment client, funded Base USDC wallet and spending authorization.
 Buyer guide and exact-identity input instructions: https://yangchunhong3000.github.io/cn-evidence-public-docs/buyer-guide.html
 Free fictional sample (no live query): https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.json
