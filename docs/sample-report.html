@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>What a supplier data check tells you — CN Evidence fictional example</title>
+  <meta name="description" content="A fictional Chinese supplier-check example: understand returned records, missing coverage and next checks before setting up an API client or wallet.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to example</a>
+<header><nav aria-label="Main"><a class="brand" href="./">CN Evidence</a><div class="nav-links"><a href="#example">Read the example</a><a href="sample-report.json">Matching JSON</a><a href="buyer-guide.html">Integration guide</a></div></nav></header>
+<main id="main">
+  <div class="hero">
+    <p class="eyebrow">Understand the output before connecting a wallet</p>
+    <h1>What did the supplier check find — and what is still unknown?</h1>
+    <p class="lead">For a workflow reviewing a Chinese supplier before onboarding: retrieve company information and recorded-risk modules, preserve their limits, and decide what needs further review.</p>
+    <p class="warning"><strong>Entirely fictional. No company was queried and no payment was made.</strong> This is a hand-authored explanation of our existing <a href="sample-report.json">fictional Basic JSON sample</a>, not a real customer case or a live report. The API returns structured data; the review notes below are documentation, not an additional automated assessment feature.</p>
+  </div>
+  <section id="example" aria-labelledby="example-heading">
+    <h2 id="example-heading">A supplier-onboarding example</h2>
+    <p><strong>Question:</strong> “What registration information and recorded issues should my workflow review for this legal entity?” This is narrower than “Can I safely pay this supplier?”</p>
+    <p><strong>Before a real query:</strong> obtain the exact Chinese registered company name or USCC and confirm it refers to the intended entity. A brand, English translation or storefront is not sufficient. This service does not do that mapping for you.</p>
+    <div class="table-wrap"><table>
+      <caption>Read these observations against the same fictional JSON, not as facts about a company.</caption>
+      <thead><tr><th scope="col">Observation in this sample</th><th scope="col">JSON basis</th><th scope="col">What a buyer or agent should do</th></tr></thead>
+      <tbody>
+        <tr><td>Registration module returned a company-name field. No operating status, licence, address or name/code verification is illustrated.</td><td><code>modules.registration.status</code> = <code data-json-pointer="/modules/registration/status">ok</code><br><code>data.companyName</code> = <span lang="zh-CN" data-json-pointer="/modules/registration/data/companyName">虚构示例企业（不可用于查询）</span></td><td>Treat <code>ok</code> as a module result status, not a verdict that the supplier is legitimate or active. Inspect the actual returned fields; do not invent missing facts.</td></tr>
+        <tr><td>No operating-abnormality records appear in this fictional result.</td><td><code>modules.operating_abnormalities.status</code> = <code data-json-pointer="/modules/operating_abnormalities/status">no_records</code></td><td>Say “no records returned by this query,” not “no risk” or “clean company.” Do not infer nationwide completeness or current status.</td></tr>
+        <tr><td>One fictional administrative-penalty placeholder is returned. The example does not provide its date, amount, issuing authority or present legal effect.</td><td><code>modules.administrative_penalties.records[0].description</code> = <span data-json-pointer="/modules/administrative_penalties/records/0/description">Fictional record illustrating a list; not a real penalty.</span></td><td>In a real result, review available details and seek missing context before acting. A historical penalty is not automatically present disqualification. Never turn this placeholder into a real allegation.</td></tr>
+        <tr><td>The penalty list may be incomplete.</td><td><code>modules.administrative_penalties.possibly_truncated</code> = <code data-json-pointer="/modules/administrative_penalties/possibly_truncated">true</code><br><code>has_more</code> = <code data-json-pointer="/modules/administrative_penalties/has_more">null</code></td><td>Preserve the uncertainty. Unknown pagination is not “no more records.” This service does not automatically fetch remaining pages.</td></tr>
+        <tr><td>Six Full-only modules were not requested in this Basic example.</td><td>Serious violations, enforcement, dishonesty, bankruptcy, qualifications and customs: <code>not_requested</code>.</td><td>Do not display an unqueried module as “passed.” Full adds these modules, but does not remove page, history or coverage limits.</td></tr>
+        <tr><td>This illustration has no real query timestamp.</td><td><code>queried_at</code> = <code data-json-pointer="/queried_at">null</code></td><td>Do not call it current evidence. In real output, query time and the underlying records' update time are different concepts.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section aria-labelledby="summary-heading">
+    <h2 id="summary-heading">A careful summary — not a supplier rating</h2>
+    <div class="scope"><p><strong>Fictional worked reading:</strong> the Basic sample contains a company-name field, no returned operating-abnormality records, and one penalty placeholder in a potentially truncated list. Six modules were not requested. There is not enough information to determine supplier reliability or payment safety.</p></div>
+    <p><strong>Possible workflow use:</strong> route a returned record for review, keep its evidence and limits attached, and request the missing context. Your workflow owns this decision. We do not return an automated “approve this supplier” recommendation.</p>
+    <p><strong>Still outside this check:</strong> physical factory existence, production quality or capacity, bank-account ownership, fraud guarantees and a complete legal due-diligence conclusion. A report is a supporting data input, not a substitute for these checks.</p>
+  </section>
+  <section aria-labelledby="scope-heading">
+    <h2 id="scope-heading">Choose the data scope, not a safety score</h2>
+    <div class="cards">
+      <article class="card"><h3>Basic</h3><p class="price">0.032 <span>USDC / report</span></p><p>Registration, operating abnormalities and administrative penalties.</p><p>This page explains the Basic sample. Actual field availability varies.</p></article>
+      <article class="card full"><h3>Full</h3><p class="price">0.093 <span>USDC / report</span></p><p>Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications and customs.</p><p>Nine modules, not nine fields. No claim of comprehensive due diligence.</p></article>
+      <article class="card"><h3>Shared limits</h3><p>Each list: first page, at most ten records. No automatic history or pagination. Serious violations, enforcement and dishonesty use the current-status option.</p><p>Missing or unrequested information is not a clean result.</p></article>
+    </div>
+    <p class="note">Check the live quote before authorizing payment. A real purchase requires a compatible x402 payment client, Base USDC and spending approval. Plain MCP discovery does not provide a wallet or buy data. Reading this page or JSON costs nothing and performs no query.</p>
+  </section>
+  <section aria-labelledby="next-heading">
+    <h2 id="next-heading">Evaluate first. Integrate only if the output fits.</h2>
+    <ol><li>Compare the illustrated output and coverage with the fields your workflow needs.</li><li>Confirm the Chinese legal entity; do not turn a guessed English-name match into a purchase.</li><li>Review the integration guide, payment controls and recovery instructions before a real request.</li></ol>
+    <div class="actions"><a class="button" href="sample-report.json">Inspect the matching JSON</a><a class="button secondary" href="buyer-guide.html">See inputs, payment &amp; recovery</a><a class="button secondary" href="https://api.cnevidence.com/openapi.json">Live API schema</a></div>
+    <p>No signup, wallet or payment is required to read the example. This is not an offer of a free live query.</p>
+  </section>
+  <section lang="zh-CN" aria-labelledby="zh-heading">
+    <h2 id="zh-heading">中文说明：买到的是记录，不是“安全保证”</h2>
+    <p>这是完全虚构的 Basic 示例，没有查询真实公司。它演示如何把“查到的记录”“未查的模块”和“未知的覆盖范围”分开。示例中的工商信息只展示名称，不能据此认定企业正常经营；处罚是占位内容，不能用作真实企业证据。</p>
+    <p>这份页面是对 JSON 的人工编写说明，不代表接口新增了自动风险评分、人工核验或采购建议功能。正式查询仍需准确中文企业名称或统一社会信用代码，且每个列表仅首页、最多十条。看完示例再决定是否值得接入，不必先配置钱包。</p>
+  </section>
+</main>
+<footer><p>CN Evidence · Fictional documentation example · <a href="./">Home</a> · <a href="buyer-guide.html">Buyer guide</a></p></footer>
+</body>
+</html>

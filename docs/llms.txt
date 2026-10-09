@@ -1,12 +1,17 @@
 # CN Evidence — China supplier information API (v2)
 
+Current V3: 64 individual data tools deployed; MCP tools/list returns 68 total (64 data tools, 3 older tools, one schema helper). The authoritative current catalog and schemas are https://api.cnevidence.com/free/cn/tools; same-origin OpenAPI: https://api.cnevidence.com/openapi.json. V3 guide: https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html. Each new V3 call is 0.011 USDC. The 64 tools passed upstream smoke checks but have not completed real-wallet paid end-to-end acceptance. Do not imply all 104 upstream tools are available.
+
+Readable fictional supplier-check example (documentation only, not an automatic risk assessment or live query): https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.html
+
 Paid lookup: a plain MCP connection cannot purchase data without an x402 payment client, funded Base USDC wallet and spending authorization.
+The old Basic/Full buyer guide describes legacy packages only; current V3 is documented at https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html.
 Buyer guide and exact-identity input instructions: https://yangchunhong3000.github.io/cn-evidence-public-docs/buyer-guide.html
 Free fictional sample (no live query): https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.json
 
 CN Evidence provides structured Chinese company information for supplier verification and due diligence. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
 
-## Pricing and coverage
+## Legacy Basic and Full packages (not the whole current catalog)
 
 | Package | USDC per successful report | Included modules |
 | --- | --- | --- |
