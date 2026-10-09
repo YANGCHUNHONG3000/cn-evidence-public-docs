@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CN Evidence — V3 individual tools</title>
+<style>body{max-width:900px;margin:32px auto;padding:20px;font:17px/1.7 system-ui;color:#182638}pre{overflow:auto;background:#f1f5f9;padding:16px}a{color:#0656a3}</style>
+<h1>V3 individual data tools</h1>
+<p><a href="./">Home</a> · <a href="buyer-guide.html">Legacy Basic/Full buyer guide</a> · <a href="https://api.cnevidence.com/free/cn/tools">Live authoritative catalog</a> · <a href="https://api.cnevidence.com/openapi.json">Same-origin OpenAPI</a></p>
+<p>64 individual V3 data tools are deployed. MCP <code>tools/list</code> currently returns 68 entries: 64 data tools, 3 older tools, and one free schema helper. The live catalog is authoritative for current tools, schemas and prices. Do not treat the count as 104 available tools.</p>
+<p>Each new V3 tool call costs 0.011 USDC and makes one upstream call. A funded Base USDC wallet and x402-compatible client are required to pay. The tools passed server upstream smoke checks, including empty and statistical results. The new 64 have not completed real-wallet payment, settlement and delivery acceptance; no complete paid-flow claim is made here.</p>
+<h2>HTTP</h2>
+<p>POST <code>https://api.cnevidence.com/x402/cn/tools/&lt;v3_tool_name&gt;</code> with JSON body:</p>
+<pre>{"arguments":{"company_id":"24-lowercase-hex-id"}}</pre>
+<p>Illustrative shape only, not a runnable request. Use the exact argument schema shown in the live catalog/OpenAPI and satisfy the x402 payment challenge. Required arguments vary by tool.</p>
+<h2>MCP</h2>
+<p>Data tools are named <code>cn_data_&lt;v3_tool_name&gt;</code>. A <code>tools/call</code> request nests the tool arguments as follows:</p>
+<pre>{"name":"cn_data_v3_company_detail","arguments":{"arguments":{"company_name":"精确中文企业法定名称"}}}</pre>
+<p>Company detail accepts the exact Chinese legal company name or an upstream <code>company_id</code>. Other company tools require that returned <code>company_id</code>. Use <code>get_cn_data_tool_schema</code> with <code>tool_name="v3_company_detail"</code> for a free local schema and price lookup. It does not query upstream data. The live catalog is the source of truth.</p>
+<h2>Identity and paging limits</h2>
+<ul>
+<li>Company detail accepts an exact <code>company_name</code> or <code>company_id</code>. Other company tools require the 24-character lowercase hexadecimal <code>company_id</code> obtained from company detail.</li>
+<li>Record detail tools require a <code>record_id</code> obtained from the matching list tool. A detail call does not perform a hidden lookup. Each paid tool call is separate.</li>
+<li>Paged V3 list tools return only the first page, up to five items. There is no automatic pagination, history query or retry. Array or statistical tools may have different shapes; check their live schema and description.</li>
+<li>An empty response is not proof of no risk, nonexistence, complete history or nationwide coverage. Statistical and filter summaries are not underlying record details.</li>
+</ul>
+<p>The retained legacy Basic and Full packages remain separate: 0.032 and 0.093 USDC respectively, covering 3 and 9 modules, with lists limited to the first page of up to 10. Their package descriptions apply only to those legacy packages.</p>
+<p>The retired local Shenzhen/Beijing dataset and free entity resolution are not current services. Free identity preflight checks input format only. Native MPP and the old the402 flow remain paused. No data-field or commercial redistribution rights are asserted by this guide.</p>
+<h2>中文摘要</h2>
+<p>当前V3已部署64个单项数据工具，MCP目录共68项（64数据工具、3个旧工具、1个免费Schema助手）。每次V3调用需要Base USDC钱包和x402支付客户端，价格0.011 USDC。实时目录为工具、参数和价格的权威来源；通过上游冒烟检查不代表真实钱包付款、结算和交付闭环已验收。</p>
+<p>HTTP：POST <code>/x402/cn/tools/&lt;v3_tool_name&gt;</code>，JSON为 <code>{"arguments":{...}}</code>。MCP工具名为 <code>cn_data_&lt;v3_tool_name&gt;</code>，tools/call参数使用 <code>{"arguments":{"arguments":{...}}}</code>。Schema助手 <code>get_cn_data_tool_schema(tool_name)</code> 免费且不查上游。</p>
+<p>企业详情只接受精确中文企业法定名称或企业详情返回的company_id；其他企业工具须用该上游返回的24位小写十六进制company_id。详情工具的record_id必须来自对应列表工具。每次调用单独收费，无隐藏查询。仅分页列表最多返回首页5条；数组和统计类工具以各自Schema为准。不自动翻页、查历史或重试。空结果不代表无风险或记录不存在。旧Basic/Full仍为0.032/0.093 USDC、3/9模块、分页列表首页最多10条，仅是旧套餐本身的范围。</p>
+</html>

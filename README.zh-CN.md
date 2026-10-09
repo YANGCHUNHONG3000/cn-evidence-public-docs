@@ -1,4 +1,6 @@
-# CN Evidence — China supplier information API (v2)
+# CN Evidence — China supplier information API
+
+**当前 V3 单项工具目录：**已部署64个独立数据工具。MCP `tools/list` 当前共返回68项（64个数据工具、3个旧工具和1个Schema说明工具）。已启用工具与参数以[实时目录](https://api.cnevidence.com/free/cn/tools)为准，调用方式见[V3接入说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html)。每次新V3工具调用0.011 USDC。64项已通过上游冒烟检查，但尚未完成真实钱包付款的端到端验收。
 
 **先看交付内容，再决定是否接入：** [可读的虚构核验示例](https://yangchunhong3000.github.io/cn-evidence-public-docs/sample-report.html)把查到的记录、未查模块和覆盖限制分开解释，无需钱包、不查询真实企业。页面中的核对建议是文档说明，不是新增自动风险判断功能。
 
@@ -6,7 +8,9 @@
 
 CN Evidence provides structured Chinese company information for supplier verification and due diligence. The old local procurement/regulatory dataset is retired from active service. Existing API URLs and MCP tool names remain available.
 
-## Pricing and coverage
+## 旧版 Basic / Full 套餐
+
+以下价格与模块数仅描述保留的旧版 Basic/Full 套餐，并非当前服务的全部目录。
 
 | Package | USDC per successful report | Included modules |
 | --- | --- | --- |
