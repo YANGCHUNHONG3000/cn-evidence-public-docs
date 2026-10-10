@@ -5,11 +5,13 @@
 <h1>V3 individual data tools</h1>
 <p><a href="./">Home</a> · <a href="buyer-guide.html">Legacy Basic/Full buyer guide</a> · <a href="https://api.cnevidence.com/free/cn/tools">Live authoritative catalog</a> · <a href="https://api.cnevidence.com/openapi.json">Same-origin OpenAPI</a></p>
 <p>64 individual V3 data tools are deployed. MCP <code>tools/list</code> currently returns 68 entries: 64 data tools, 3 older tools, and one free schema helper. The live catalog is authoritative for current tools, schemas and prices. Do not treat the count as 104 available tools.</p>
-<p>Each new V3 tool call costs 0.011 USDC and makes one upstream call. A funded Base USDC wallet and x402-compatible client are required to pay. The tools passed server upstream smoke checks, including empty and statistical results. The new 64 have not completed real-wallet payment, settlement and delivery acceptance; no complete paid-flow claim is made here.</p>
+<p>Each new V3 tool call costs 0.011 USDC and makes one upstream call. A funded Base USDC wallet and x402-compatible client are required to pay. The tools passed server upstream smoke checks, including empty and statistical results. On 2026-10-10, one owner-funded HTTP <code>v3_company_detail</code> purchase passed real-wallet payment, settlement, report delivery and free recovery checks at 0.011 USDC. This internal test is not a customer sale, acceptance of all 64 tools, or acceptance of the V3 MCP payment transport or every third-party client.</p>
+<p><strong>Limited rollout:</strong> upstream budget and availability gates remain enforced. A tool in the discovery catalog may be temporarily paused and return an error; discovery is not a delivery guarantee.</p>
 <h2>HTTP</h2>
 <p>POST <code>https://api.cnevidence.com/x402/cn/tools/&lt;v3_tool_name&gt;</code> with JSON body:</p>
 <pre>{"arguments":{"company_id":"24-lowercase-hex-id"}}</pre>
 <p>Illustrative shape only, not a runnable request. Use the exact argument schema shown in the live catalog/OpenAPI and satisfy the x402 payment challenge. Required arguments vary by tool.</p>
+<p>For the paid-tested company-detail route, POST <code>/x402/cn/tools/v3_company_detail</code> with <code>{"arguments":{"company_name":"YOUR_CONFIRMED_CHINESE_LEGAL_NAME"}}</code>. This is a placeholder, not a company to query. Save and send a unique recovery token before signing, as described below.</p>
 <h2>MCP</h2>
 <p>Data tools are named <code>cn_data_&lt;v3_tool_name&gt;</code>. A <code>tools/call</code> request nests the tool arguments as follows:</p>
 <pre>{"name":"cn_data_v3_company_detail","arguments":{"arguments":{"company_name":"精确中文企业法定名称"}}}</pre>
@@ -23,8 +25,17 @@
 </ul>
 <p>The retained legacy Basic and Full packages remain separate: 0.032 and 0.093 USDC respectively, covering 3 and 9 modules, with lists limited to the first page of up to 10. Their package descriptions apply only to those legacy packages.</p>
 <p>The retired local Shenzhen/Beijing dataset and free entity resolution are not current services. Free identity preflight checks input format only. Native MPP and the old the402 flow remain paused. No data-field or commercial redistribution rights are asserted by this guide.</p>
+<h2 id="failure-recovery">Failure handling and free recovery</h2>
+<ul>
+<li>No automatic upstream retry, fresh payment or substitution with a non-equivalent legacy API. A failed query is not a clean/no-risk result. Pre-settlement query or report-storage failure stops this service from attempting settlement.</li>
+<li>Repeated failures temporarily pause only the affected tool: three failures in a five-minute window trigger a 60-second cooldown. A subsequent separately authorized request can test recovery; the server does not launch paid background probes. Cooldown expiry is not permission to pay again.</li>
+<li>Before purchase, save 32 cryptographically random bytes as 64 lowercase hex characters, and send that unique secret as <code>X-CN-Recovery-Token</code> on the paid POST request. Never publish it or put it in a URL. Without this prior opt-in, automatic report recovery is unavailable.</li>
+<li>After a lost response, use HTTPS POST <code>https://api.cnevidence.com/free/cn/payment/recover</code> with <code>{"recovery_token":"YOUR_SAVED_64_HEX_SECRET","include_report":true}</code>. It makes no payment or upstream query. Check both HTTP status and body: HTTP 200 can mean a recovered settled report or <code>state: failed_before_settlement</code> with no report. An unknown/interrupted outcome requires reconciliation, never automatic repayment.</li>
+<li>Prepared reports have a 24-hour recovery window. Local-copy restoration is attempted before eligible refund review. Review is not a completed or guaranteed refund; expiry does not automatically entitle a refund. See the <a href="buyer-guide.html">buyer guide</a> for token, reconciliation, storage and restricted refund-worker conditions.</li>
+</ul>
 <h2>中文摘要</h2>
-<p>当前V3已部署64个单项数据工具，MCP目录共68项（64数据工具、3个旧工具、1个免费Schema助手）。每次V3调用需要Base USDC钱包和x402支付客户端，价格0.011 USDC。实时目录为工具、参数和价格的权威来源；通过上游冒烟检查不代表真实钱包付款、结算和交付闭环已验收。</p>
+<p>当前V3已部署64个单项数据工具，MCP目录共68项（64数据工具、3个旧工具、1个免费Schema助手）。每次V3调用需要Base USDC钱包和x402支付客户端，价格0.011 USDC。2026-10-10已用自有钱包完成一次HTTP企业详情的付款、结算、交付和免费找回验收；这不是客户成交，也不代表64项全部完成付费验收或V3原生MCP支付验收。当前仍是受预算与可用性限制的小范围开放。</p>
 <p>HTTP：POST <code>/x402/cn/tools/&lt;v3_tool_name&gt;</code>，JSON为 <code>{"arguments":{...}}</code>。MCP工具名为 <code>cn_data_&lt;v3_tool_name&gt;</code>，tools/call参数使用 <code>{"arguments":{"arguments":{...}}}</code>。Schema助手 <code>get_cn_data_tool_schema(tool_name)</code> 免费且不查上游。</p>
 <p>企业详情只接受精确中文企业法定名称或企业详情返回的company_id；其他企业工具须用该上游返回的24位小写十六进制company_id。详情工具的record_id必须来自对应列表工具。每次调用单独收费，无隐藏查询。仅分页列表最多返回首页5条；数组和统计类工具以各自Schema为准。不自动翻页、查历史或重试。空结果不代表无风险或记录不存在。旧Basic/Full仍为0.032/0.093 USDC、3/9模块、分页列表首页最多10条，仅是旧套餐本身的范围。</p>
+<p>失败时不自动重扣、不悄悄换成不等价旧接口。连续失败会暂时停用该工具，其他工具不因此一起停用。付款前须保存并发送找回密钥；超时后用免费查单/找回接口核对，不能仅凭HTTP 200判断拿到了报告。结果不明先对账，报告保留24小时；退款审核不等于已退款。</p>
 </html>
