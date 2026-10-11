@@ -3,7 +3,7 @@
 <title>CN Evidence — V3 individual tools</title>
 <style>body{max-width:900px;margin:32px auto;padding:20px;font:17px/1.7 system-ui;color:#182638}pre{overflow:auto;background:#f1f5f9;padding:16px}a{color:#0656a3}</style>
 <h1>V3 individual data tools</h1>
-<p><a href="./">Home</a> · <a href="buyer-guide.html">Legacy Basic/Full buyer guide</a> · <a href="https://api.cnevidence.com/free/cn/tools">Live authoritative catalog</a> · <a href="https://api.cnevidence.com/openapi.json">Same-origin OpenAPI</a></p>
+<p><a href="./">Home</a> · <a href="buyer-guide.html">Buyer setup and guarded purchase example</a> · <a href="https://api.cnevidence.com/free/cn/tools">Live authoritative catalog</a> · <a href="https://api.cnevidence.com/openapi.json">Same-origin OpenAPI</a></p>
 <p>64 individual V3 data tools are deployed. MCP <code>tools/list</code> currently returns 68 entries: 64 data tools, 3 older tools, and one free schema helper. The live catalog is authoritative for current tools, schemas and prices. Do not treat the count as 104 available tools.</p>
 <p>Each new V3 tool call costs 0.011 USDC and makes one upstream call. A funded Base USDC wallet and x402-compatible client are required to pay. The tools passed server upstream smoke checks, including empty and statistical results. On 2026-10-10, one owner-funded HTTP <code>v3_company_detail</code> purchase passed real-wallet payment, settlement, report delivery and free recovery checks at 0.011 USDC. This internal test is not a customer sale, acceptance of all 64 tools, or acceptance of the V3 MCP payment transport or every third-party client.</p>
 <p><strong>Limited rollout:</strong> upstream budget and availability gates remain enforced. A tool in the discovery catalog may be temporarily paused and return an error; discovery is not a delivery guarantee.</p>
@@ -12,6 +12,9 @@
 <pre>{"arguments":{"company_id":"24-lowercase-hex-id"}}</pre>
 <p>Illustrative shape only, not a runnable request. Use the exact argument schema shown in the live catalog/OpenAPI and satisfy the x402 payment challenge. Required arguments vary by tool.</p>
 <p>For the paid-tested company-detail route, POST <code>/x402/cn/tools/v3_company_detail</code> with <code>{"arguments":{"company_name":"YOUR_CONFIRMED_CHINESE_LEGAL_NAME"}}</code>. This is a placeholder, not a company to query. Save and send a unique recovery token before signing, as described below.</p>
+<h3>Start with company detail / 企业详情购买入口</h3>
+<p>The <a href="buyer-guide.html#purchase-example">guarded Node 20+ purchase example</a> now supports <code>--tool v3_company_detail --company "YOUR_CONFIRMED_CHINESE_LEGAL_NAME"</code>. Without <code>--pay</code> it only validates an unpaid quote: no wallet, signature or upstream query. Explicit purchase requires <code>--pay --max-usdc 0.011 --state NEW_PRIVATE_RECEIPT.json --out NEW_REPORT.json</code> and a securely configured buyer wallet. Replace the placeholder with an independently confirmed exact Chinese legal name.</p>
+<p>This bounded client supports company-name detail, not all 64 tool schemas or V3 MCP payment. It preserves the same request body, saves recovery credentials before signing, and will not retry a payment. Offline mocked delivery/recovery and live unpaid quote checks are not a new funded acceptance test. Do not purchase legacy Basic/Full as a prerequisite.</p>
 <h2>MCP</h2>
 <p>Data tools are named <code>cn_data_&lt;v3_tool_name&gt;</code>. A <code>tools/call</code> request nests the tool arguments as follows:</p>
 <pre>{"name":"cn_data_v3_company_detail","arguments":{"arguments":{"company_name":"精确中文企业法定名称"}}}</pre>

@@ -16,18 +16,18 @@
 <tr><td>Plain remote MCP client</td><td>Can discover tools; requires an x402 payment client or local HTTP-to-MCP payment bridge to buy data. Do not assume the host supplies a wallet.</td></tr></table>
 <h2>Free inspection — no wallet needed</h2>
 <p>Read the sample and schema first. The following request only gets a quote. It has no payment signature, is marked as an internal/developer test and does not buy a report:</p>
-<pre>curl -i -H "X-CN-Traffic: internal_test" https://api.cnevidence.com/x402/cn/supplier/evidence/basic</pre>
+<pre>curl -i -A "CN-Evidence-Monitor/docs-check" -H "X-CN-Traffic: internal_test" https://api.cnevidence.com/x402/cn/supplier/evidence/basic</pre>
 <p>HTTP 402 means payment is required, not server downtime. For native MCP, HTTP 200 may carry <code>result.isError=true</code> and <code>structuredContent.error="Payment Required"</code>; that is not company data or a completed purchase. Do not repeatedly retry without a valid payment client.</p>
 <h2>Free MCP connection check / 免费连接诊断</h2>
 <p>Use POST to <code>https://mcp.cnevidence.com/mcp</code> with <code>Content-Type: application/json</code> and <code>Accept: application/json, text/event-stream</code>. Prefer a current Streamable HTTP MCP SDK for the normal initialize/notification lifecycle. This stateless service also accepts the following direct tools/list diagnostic; it lists tool definitions only, not company data.</p>
 <p>Download <a href="mcp-tools-list.json">mcp-tools-list.json</a> into your current folder. On Windows PowerShell use <code>curl.exe</code> explicitly:</p>
-<pre>curl.exe -i "https://mcp.cnevidence.com/mcp" -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" -H "X-CN-Traffic: internal_test" --data-binary "@mcp-tools-list.json"</pre>
+<pre>curl.exe -i "https://mcp.cnevidence.com/mcp" -A "CN-Evidence-Monitor/docs-check" -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" -H "X-CN-Traffic: internal_test" --data-binary "@mcp-tools-list.json"</pre>
 <p>On macOS/Linux replace <code>curl.exe</code> with <code>curl</code>. Expected: HTTP 200 with 68 tool definitions (64 individual data tools, the three legacy tools and a free schema helper). No wallet or company identity is needed for discovery. The internal-test header is for diagnostics only; omit it for real customer queries. Use the V3 guide for new-tool identity rules; the company/USCC examples below describe legacy Basic/Full only.</p>
 <table><tr><th>Result</th><th>Meaning and action</th></tr>
 <tr><td>406 / Client must accept application/json</td><td>The current JSON-response service rejects Accept: */*, text/html, or text/event-stream alone on POST. Send the explicit Accept header above. A browser address-bar visit is not an MCP handshake. Do not repeatedly retry unchanged requests.</td></tr>
 <tr><td>400 / JSON-RPC error</td><td>Check valid JSON, method, protocol negotiation and request shape; read the returned error. Not automatically a server outage.</td></tr>
 <tr><td>404 / 405</td><td>Check endpoint and method. MCP is /mcp; the HTTP Full report is POST, not GET. The protocols are not interchangeable.</td></tr>
-<tr><td>422 / invalid_tool_input</td><td>Check company/USCC and the nesting: Basic uses query, Full uses request. Correct identity before purchase.</td></tr>
+<tr><td>422 / invalid_tool_input</td><td>For legacy Basic/Full, check company/USCC and nesting: Basic uses query, Full uses request. For V3, use its own <a href="v3-tools.html">argument schema and nesting</a>; legacy USCC input is not interchangeable. Correct identity before purchase.</td></tr>
 <tr><td>HTTP 402 or MCP Payment Required</td><td>Connection can be working; a configured payment client and explicit authorization are still required. This is not a delivered report.</td></tr>
 <tr><td>5xx / timeout</td><td>Record time, request ID if available and sanitized error. If payment may already have been submitted, reconcile first rather than blindly buying again. Never share signatures or private keys in diagnostics.</td></tr></table>
 <p>上述错误数字是请求结果，不是客户数量。连接探测、页面抓取和付款查询必须分开统计。</p>
@@ -35,7 +35,7 @@
 <p><strong>New: free input preflight, not a lookup.</strong> Before purchasing, POST a JSON object with <code>company</code> or <code>uscc</code> to <code>https://api.cnevidence.com/free/cn/identity/preflight</code>. It checks local format and prepares Basic/Full HTTP and MCP request shapes. It makes no upstream call, needs no wallet, and cannot verify company existence, USCC checksum, name/code agreement or absence of risk.</p>
 <p>Alternatively call the existing free MCP tool <code>resolve_china_company</code> with <code>company</code> and/or <code>uscc</code>. Despite its legacy name, it does not resolve entities. An English-only brand/name prompts you to obtain a Chinese legal name or USCC; it is never translated into an assumed company.</p>
 <p>Download <a href="preflight-input.json">the fictional diagnostic input</a> and run:</p>
-<pre>curl.exe "https://api.cnevidence.com/free/cn/identity/preflight" -H "Content-Type: application/json" -H "X-CN-Traffic: internal_test" --data-binary "@preflight-input.json"</pre>
+<pre>curl.exe "https://api.cnevidence.com/free/cn/identity/preflight" -A "CN-Evidence-Monitor/docs-check" -H "Content-Type: application/json" -H "X-CN-Traffic: internal_test" --data-binary "@preflight-input.json"</pre>
 <p>Expected for this English-only example: <code>input_ready: false</code> and guidance to obtain the legal identifier. A correctly formatted Chinese name/code can return <code>input_ready: true</code>, but always <code>identity_verified: false</code>. This is not permission to pay. Confirm the entity separately; do not auto-purchase just because preflight passes. Omit the internal-test header for real user preparation; do not upload identity documents or unrelated personal information.</p>
 <ul><li>Supply either <code>company</code>: exact Chinese registered legal name, or <code>uscc</code>: 18-character Unified Social Credit Code.</li>
 <li>可从用户提供的营业执照、合同、供应商官网提取线索；核对法律主体，不要把品牌、英文译名或近似名称当作已确认企业。OCR 结果也需要核对。</li>
@@ -51,10 +51,14 @@ Basic tools/call params:
 {"name":"get_china_supplier_evidence_basic","arguments":{"query":{"company":"CONFIRMED_CHINESE_LEGAL_NAME"}}}
 Full tools/call params:
 {"name":"get_china_supplier_evidence_full","arguments":{"request":{"company":"CONFIRMED_CHINESE_LEGAL_NAME"}}}</pre>
-<h2>Integrated HTTP purchase example (Node 20+)</h2>
-<p>Download and review <a href="purchase-client.mjs">purchase-client.mjs</a> and <a href="recovery-client.mjs">recovery-client.mjs</a>. The purchase example defaults to free preflight and quotation. Explicit <code>--pay</code> permits one signed attempt, pins the chain, asset, recipient and price, and saves a private recovery credential before signing. On an uncertain response it attempts free recovery once, never another purchase. It is an HTTP example, not a plug-in that makes a plain MCP host pay.</p>
+<h2 id="purchase-example">Integrated HTTP purchase example (Node 20+)</h2>
+<p>Download and review <a href="purchase-client.mjs">purchase-client.mjs</a> and <a href="recovery-client.mjs">recovery-client.mjs</a>. The example supports V3 company detail by exact Chinese name and the two legacy packages. It defaults to a free quote, with local format checking only (legacy uses the free preflight). A quote does not check upstream availability or company existence. Explicit <code>--pay</code> permits one signed attempt, pins the chain, asset, recipient and price, and saves a private recovery credential before signing. On an uncertain response it attempts free recovery once, never another purchase. It is an HTTP example, not a plug-in that makes a plain MCP host pay.</p>
 <pre>npm install @x402/core@2.25.0 @x402/evm@2.25.0 viem@2.56.3
-# Free preview, no wallet required:
+# V3 company detail: free preview, no wallet or installed SDK required:
+node purchase-client.mjs --tool v3_company_detail --company "CONFIRMED_CHINESE_LEGAL_NAME"
+# Only after purchase approval and secure local wallet configuration:
+node purchase-client.mjs --tool v3_company_detail --company "CONFIRMED_CHINESE_LEGAL_NAME" --pay --max-usdc 0.011 --state NEW_PRIVATE_RECEIPT.json --out NEW_REPORT.json
+# Alternative legacy Basic package (separate purchase, not a prerequisite):
 node purchase-client.mjs --tier basic --company "CONFIRMED_CHINESE_LEGAL_NAME"
 # Only after purchase approval and secure local wallet configuration:
 node purchase-client.mjs --tier basic --company "CONFIRMED_CHINESE_LEGAL_NAME" --pay --max-usdc 0.032 --state NEW_PRIVATE_RECEIPT.json --out NEW_REPORT.json
@@ -62,7 +66,8 @@ node purchase-client.mjs --tier basic --company "CONFIRMED_CHINESE_LEGAL_NAME" -
 # After an interruption, keep the SAME receipt and do not start another purchase:
 node recovery-client.mjs status NEW_PRIVATE_RECEIPT.json
 node recovery-client.mjs recover NEW_PRIVATE_RECEIPT.json --out RECOVERED_REPORT.json</pre>
-<p>Provide <code>CN_EVIDENCE_PRIVATE_KEY</code> only through a trusted local secret manager or protected environment, never a command-line argument, chat, source repository or our server. Keep receipt/report files in a private folder; Windows users must restrict its ACL. The per-attempt cap is not a cumulative wallet budget: creating new receipt files can authorize more purchases. Existing files are never overwritten. New client tests cover simulated timeout/recovery and live unpaid Basic/Full quotes; this exact packaged client has not had a separate funded acceptance run. Earlier service acceptance is described below.</p>
+<p>Replace the placeholder with the exact Chinese legal name before previewing. V3 example mode accepts <code>--company</code> only, not <code>--uscc</code> or company IDs; other V3 tools require a separately reviewed client following their schemas. A returned V3 report must match the requested tool and company name, indicate successful business processing, and contain agreeing structured/text results before this purchase client saves it. Name matching only normalizes surrounding whitespace and full-width parentheses, not brands or fuzzy names.</p>
+<p>Provide <code>CN_EVIDENCE_PRIVATE_KEY</code> only through a trusted local secret manager or protected environment, never a command-line argument, chat, source repository or our server. Keep receipt/report files in a private folder; Windows users must restrict its ACL. The per-attempt cap is not a cumulative wallet budget: creating new receipt files can authorize more purchases. Existing files are never overwritten. Client tests cover simulated delivery, identity mismatch, timeout/recovery and live unpaid quotes; this exact packaged client has not had a separate funded acceptance run. Earlier service acceptance is described below.</p>
 <h2>AgentCash HTTP example — spending operation</h2>
 <p><strong>Only run after the owner approves the purchase and confirms the entity.</strong> These commands can spend wallet funds. Configure and review the buyer tool's controls first; the examples themselves do not enforce a cumulative budget. Do not use an unrestricted auto-paying client if you require an enforced budget.</p>
 <pre>npx agentcash@latest fetch "https://api.cnevidence.com/x402/cn/supplier/evidence/basic?uscc=YOUR_CONFIRMED_USCC"

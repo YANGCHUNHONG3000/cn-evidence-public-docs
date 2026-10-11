@@ -37,7 +37,7 @@ export async function run(args,{fetchImpl=globalThis.fetch,write=console.log}={}
   if(command==='diagnose'){
     if(file)throw new Error('diagnose takes no arguments.');
     const r=await request(MCP,{jsonrpc:'2.0',id:1,method:'tools/list',params:{}},fetchImpl,
-      {Accept:'application/json, text/event-stream','X-CN-Traffic':'internal_test'});
+      {Accept:'application/json, text/event-stream','X-CN-Traffic':'internal_test','User-Agent':'CN-Evidence-Monitor/recovery-client-diagnose'});
     const toolCount=r.data.result?.tools?.length;
     write(JSON.stringify({http_status:r.status,tool_count:toolCount??null,connection_ok:r.status===200&&Number.isInteger(toolCount),payment_tested:false,company_data_requested:false}));return;
   }
