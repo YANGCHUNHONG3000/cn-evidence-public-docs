@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CN Evidence — Product catalog / 产品目录</title>
+<meta name="description" content="CN Evidence product prices, scope and current availability. Check the live catalog before use.">
+<style>body{max-width:920px;margin:32px auto;padding:20px;font:17px/1.7 system-ui;color:#182638}a{color:#0656a3}table{border-collapse:collapse;width:100%}td,th{padding:10px;border:1px solid #ccc;text-align:left;vertical-align:top}.note{background:#f1f5f9;padding:12px}</style>
+<h1>Products and pricing / 产品与价格</h1>
+<p><a href="./">Home</a> · <a href="buyer-guide.html">Buyer guide / 买方指南</a> · <a href="https://api.cnevidence.com/free/cn/products">Live catalog and availability / 实时目录与可用状态</a></p>
+<p class="note">Prices and availability can change. The live catalog at <a href="https://api.cnevidence.com/free/cn/products">api.cnevidence.com/free/cn/products</a> is authoritative for current status. A published price does not by itself mean a product can be purchased.</p>
+<h2>Existing products / 现有产品</h2>
+<table><thead><tr><th>Product</th><th>Price</th><th>Scope and status</th></tr></thead><tbody>
+<tr><td>V3 individual tools / V3 单项工具</td><td>0.011 USDC per call / 每次调用</td><td>64 individual data tools. Check the live tool catalog for current tool availability. / 64 个单独数据工具；各工具当前可用性请查看实时目录。</td></tr>
+<tr><td>Legacy Basic / 旧版 Basic</td><td>0.032 USDC</td><td>Existing package and price remain unchanged. / 既有套餐与价格保持不变。</td></tr>
+<tr><td>Legacy Full / 旧版 Full</td><td>0.093 USDC</td><td>Existing package and price remain unchanged. / 既有套餐与价格保持不变。</td></tr>
+<tr><td>Free compose / 免费报告合成</td><td>0 additional USDC / 不额外收费</td><td>Composes eligible evidence already purchased; it does not purchase missing evidence. / 合成符合条件的已购证据，不会代购缺失证据。</td></tr>
+<tr><td>Free QCC qualifications pilot / 免费企查查资质试点</td><td>0 additional USDC / 不额外收费</td><td>The existing bounded pilot remains free when available. It is separate from paid QCC products. / 现有有限额度试点在可用时仍免费，与企查查付费产品分开。</td></tr>
+</tbody></table>
+<h2>Fixed-scope screening report / 固定范围筛查报告</h2>
+<p><strong>Standard screening, 0.29 USDC / 标准筛查，0.29 USDC.</strong> This fixed package covers ten named Jinghai checks: company details, operating exceptions, administrative penalties, shareholders, registration changes, licenses, tax credit, tax arrears, court hearing notices and judgments. Each list uses only its first provider page and returns at most five items. There is no automatic pagination or retry.</p>
+<p lang="zh-CN">固定包含鲸海十项查询：主体登记、经营异常、行政处罚、股东、登记变更、行政许可、纳税信用、欠税、开庭公告和裁判文书。每个列表仅取服务商首页，最多五条；不自动翻页或重试。</p>
+<p>Settlement occurs only after all ten contracted queries validate and the report has been stored. The report is available as JSON or Chinese- or English-language HTML and can be recovered without a new provider query. This is a screening report, not complete due diligence, a safety verdict, or a guarantee that the records are exhaustive. An empty result is not proof that no risk exists.</p>
+<p lang="zh-CN">仅当十项约定查询全部通过校验且报告已保存后才结算。可交付 JSON 或中文/英文 HTML，之后可恢复领取而不再查询服务商。这是筛查报告，不是完整尽调、安全结论或记录齐全保证；空结果也不证明没有风险。</p>
+<p>Before any purchase, save a separate random 32-byte hex <code>X-CN-Recovery-Token</code>. The original report can be recovered for 24 hours using <code>POST /free/cn/products/recover</code>, with <code>recovery_token</code> and optional <code>format</code> (<code>json</code>, <code>zh-CN</code> or <code>en</code>) in the JSON body. Never place this private token in a URL. After a timeout or uncertain payment, check the existing order; do not automatically pay again. The new product route is HTTP x402 only, not a new MCP tool.</p>
+<p lang="zh-CN">购买前请单独生成并保存恢复口令；原报告可在 24 小时内免费领取。超时或付款状态不明确时先查原订单，不要自动重复付款。新套餐目前只提供 HTTP x402 接口，尚未注册为新的 MCP 工具；不含人工复核。</p>
+<p><strong>Current purchase status / 当前购买状态：</strong> The public product catalog is deployed, but the standard package is temporarily unavailable under budget protection because available reserved capacity is below the complete ten-check package requirement. It cannot currently be purchased, and a real paid end-to-end acceptance has not been completed. Check the <a href="https://api.cnevidence.com/free/cn/products">live catalog</a> for changes. / 公开产品目录已部署，但因预算保护，可用预留额度不足以覆盖完整的十项套餐，标准版暂不可购买；尚未完成真实付费端到端验收。请以实时目录查看状态变化。</p>
+<h2>QCC paid product pricing / 企查查付费产品价格</h2>
+<p>The QCC qualifications item is priced at 0.03 USDC, and the enhanced product envelope is priced at 0.59 USDC. Their commercial delivery paths have not been accepted and are not available for purchase. / 企查查资质单项标价为 0.03 USDC，增强版标价为 0.59 USDC；其商业交付链路尚未验收，目前不可购买。</p>
+<p>QCC point price rules are 1 point: 0.03 USDC; 3 points: 0.09 USDC; 5 points: 0.15 USDC; 20 points: 0.60 USDC. These are pricing rules only. They do not mean that every QCC tool is enabled or accepted; tool-specific acceptance is required. / 企查查积分价格规则为：1 积分 0.03 USDC、3 积分 0.09 USDC、5 积分 0.15 USDC、20 积分 0.60 USDC。以上仅为价格规则，不代表所有企查查工具均已开放或验收；每项工具均需单独验收。</p>
+<p>Check the live catalog before acting: <a href="https://api.cnevidence.com/free/cn/products">https://api.cnevidence.com/free/cn/products</a>.</p>
+</html>
