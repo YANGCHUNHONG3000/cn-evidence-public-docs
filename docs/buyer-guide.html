@@ -54,6 +54,7 @@ Basic tools/call params:
 Full tools/call params:
 {"name":"get_china_supplier_evidence_full","arguments":{"request":{"company":"CONFIRMED_CHINESE_LEGAL_NAME"}}}</pre>
 <h2 id="purchase-example">Integrated HTTP purchase example (Node 20+)</h2>
+<p><strong>Looking for the 0.29 USDC Standard report?</strong> Use the separate <a href="integration-pilot.html#standard-client">Standard client and recovery instructions</a>. It covers ten Jinghai checks, no QCC, first-page lists only. The legacy/detail client below does not buy Standard. The new Standard helper has offline and unsigned checks, not a fresh funded-client acceptance.</p>
 <p>Download and review <a href="purchase-client.mjs">purchase-client.mjs</a> and <a href="recovery-client.mjs">recovery-client.mjs</a>. The example supports V3 company detail by exact Chinese name and the two legacy packages. It defaults to a free quote, with local format checking only (legacy uses the free preflight). A quote does not check upstream availability or company existence. Explicit <code>--pay</code> permits one signed attempt, pins the chain, asset, recipient and price, and saves a private recovery credential before signing. On an uncertain response it attempts free recovery once, never another purchase. It is an HTTP example, not a plug-in that makes a plain MCP host pay.</p>
 <pre>npm install @x402/core@2.25.0 @x402/evm@2.25.0 viem@2.56.3
 # V3 company detail: free preview, no wallet or installed SDK required:
