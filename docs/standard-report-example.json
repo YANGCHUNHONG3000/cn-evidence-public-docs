@@ -1,0 +1,138 @@
+{
+  "schema_version": "cn-evidence-screening-redacted-example/1",
+  "presentation": "Editorial, identity-redacted extract of a stored internal acceptance report; not the full report or an API response.",
+  "fictional": false,
+  "redacted": true,
+  "internal_test": true,
+  "customer_case": false,
+  "subject_label": "Company A — identity withheld",
+  "sku": "screening-standard-v1",
+  "price_usdc_at_test": "0.29",
+  "queried_at_utc": "2026-10-12T00:38:28.919458Z",
+  "new_provider_calls_for_this_example": 0,
+  "analysis_method": "deterministic_rules_v1",
+  "human_review": false,
+  "decision": "needs_review",
+  "checks": [
+    {
+      "tool": "v3_company_detail",
+      "business_success": true,
+      "result_state": "records_returned"
+    },
+    {
+      "tool": "v3_operation_exception",
+      "business_success": true,
+      "result_state": "empty_page_returned",
+      "returned_record_count": 0,
+      "vendor_total_records": 0,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    },
+    {
+      "tool": "v3_administrative_penalty",
+      "business_success": true,
+      "result_state": "empty_page_returned",
+      "returned_record_count": 0,
+      "vendor_total_records": 0,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    },
+    {
+      "tool": "v3_shareholder_list",
+      "business_success": true,
+      "result_state": "records_returned",
+      "returned_record_count": 1,
+      "vendor_total_records": 1,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    },
+    {
+      "tool": "v3_industrial_change",
+      "business_success": true,
+      "result_state": "records_returned",
+      "returned_record_count": 5,
+      "vendor_total_records": 178,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": true
+    },
+    {
+      "tool": "v3_license_list",
+      "business_success": true,
+      "result_state": "records_returned",
+      "returned_record_count": 5,
+      "vendor_total_records": 216,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": true
+    },
+    {
+      "tool": "v3_tax_credit",
+      "business_success": true,
+      "result_state": "records_returned",
+      "returned_record_count": 3,
+      "vendor_total_records": 3,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    },
+    {
+      "tool": "v3_tax_overdue",
+      "business_success": true,
+      "result_state": "empty_page_returned",
+      "returned_record_count": 0,
+      "vendor_total_records": 0,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    },
+    {
+      "tool": "v3_court_trial_list",
+      "business_success": true,
+      "result_state": "empty_page_returned",
+      "returned_record_count": 0,
+      "vendor_total_records": 0,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    },
+    {
+      "tool": "v3_law_list",
+      "business_success": true,
+      "result_state": "empty_page_returned",
+      "returned_record_count": 0,
+      "vendor_total_records": 0,
+      "page_index": 1,
+      "page_size": 5,
+      "more_records_indicated": false
+    }
+  ],
+  "delivery_observed": {
+    "http_status": 200,
+    "formats": [
+      "json",
+      "zh-CN",
+      "en"
+    ],
+    "same_report_recovery_verified": true
+  },
+  "omitted": [
+    "company name and identifiers",
+    "people and addresses",
+    "raw provider records and record identifiers",
+    "order and request identifiers",
+    "wallet and payment details",
+    "access and recovery secrets"
+  ],
+  "limitations": [
+    "Historical sample, not a current check of any company.",
+    "Returned page only; vendor totals are provider claims, not independent counts.",
+    "Zero returned records is not no risk. Matching counts do not prove complete coverage.",
+    "The original report was not human-reviewed; no supplier approval or safety verdict.",
+    "No QCC query, full ownership/UBO, sanctions check, factory inspection or bank-account verification included.",
+    "This sample does not validate Enhanced, other tools, or MCP paid delivery."
+  ]
+}

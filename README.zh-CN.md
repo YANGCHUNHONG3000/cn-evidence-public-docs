@@ -1,5 +1,9 @@
 # CN Evidence — 中国企业数据与筛查报告
 
+**先看新版报告：**[中文标准报告样张](https://yangchunhong3000.github.io/cn-evidence-public-docs/standard-report-example-zh.html) · [English sample](https://yangchunhong3000.github.io/cn-evidence-public-docs/standard-report-example.html) · [试点范围与接入](https://yangchunhong3000.github.io/cn-evidence-public-docs/integration-pilot.html)。样张是历史内部验收报告的身份脱敏整理摘录，不是客户案例、完整原报告或接口响应结构；查看无需钱包，也不会发起新查询。
+
+**渠道验证：**[PayAPI Market 企业详情条目](https://payapi.market/api/cn-evidence-company-detail)已上架。2026-10-11，平台自行出资完成一次0.011 USDC验证；交易与我方结算、响应发送记录匹配，平台来信确认收到有效企业详情JSON。这只验证该单一路径，不是自然客户需求，也不代表新报告产品或全部工具通过验收。
+
 **企业筛查报告：**[产品与价格](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [实时产品目录](https://api.cnevidence.com/free/cn/products)。标准版 `screening-standard-v1` 价格0.29 USDC，包含10项鲸海检查，交付JSON及中、英文HTML报告。增强版 `screening-enhanced-v1` 价格0.59 USDC，包含同样10项鲸海检查，并恰好增加1项企查查资质查询。单独的企查查资质产品 `qcc-qualifications-v1` 价格0.03 USDC，仅返回规范JSON、最多30条记录，不含报告分析。以上新产品仅支持HTTP x402，不是新增MCP工具；购买前查看实时目录状态。交付依赖服务商余额和运行可用性；没有人工日额度或总商用额度限制，但不代表免除单笔限制或保证交付。
 
 **当前 V3 单项工具目录：**已部署64个独立数据工具。MCP `tools/list` 当前共返回68项（64个数据工具、3个旧工具和1个Schema说明工具）。已启用工具与参数以[实时目录](https://api.cnevidence.com/free/cn/tools)为准，调用方式见[V3接入说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html)。每次新V3工具调用0.011 USDC。2026-10-10已用自有钱包完成一次HTTP企业详情的付款、结算、交付和免费找回验收；这不是客户成交，也不代表64项全部完成付费验收或V3原生MCP支付验收。交付依赖服务商余额和运行可用性。
