@@ -1,7 +1,7 @@
 // Pure local presentation helpers. No network, wallet, storage or HTML interpretation.
 export const OFFERS = Object.freeze({
-  'screening-standard-v1': {name:'Standard screening / 标准筛查', price:'0.29', scope:'10 Jinghai checks / 鲸海十项；first page, max 5 per list / 每项列表首页最多五条'},
-  'screening-enhanced-v1': {name:'Qualifications-enhanced screening / 资质增强筛查', price:'0.59', scope:'Standard + ONE QCC qualifications query / 标准十项 + 一次企查查资质，最多30条；not comprehensive cross-checking / 不是全面交叉核验'},
+  'screening-standard-v1': {name:'Standard screening / 标准筛查', price:'0.29', scope:'10 Jinghai-first check dimensions / 十项优先鲸海；Jinghai first page, max 5 per list / 鲸海首页最多五条；conditional ONE QCC license replacement, max 100, incomplete / 许可失败限定兜底一次、最多100条、不完整'},
+  'screening-enhanced-v1': {name:'Qualifications-enhanced screening / 资质增强筛查', price:'0.59', scope:'Standard + ONE QCC qualifications query / 标准十项及许可限定兜底 + 一次企查查资质，最多30条；max two QCC calls / 最多两次企查查；not comprehensive cross-checking / 不是全面交叉核验'},
   'qcc-qualifications-v1': {name:'QCC qualifications JSON / 企查查资质 JSON', price:'0.03', scope:'ONE qualifications query, max 30 records, no analysis / 一次资质查询，最多30条，不含分析报告'}
 });
 const guard=(ok,label)=>{if(!ok)throw new Error(label);};

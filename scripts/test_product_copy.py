@@ -22,10 +22,11 @@ OLD_UNAVAILABLE = (
 
 
 class ProductCopyTests(unittest.TestCase):
-    def test_optional_total_repair_does_not_claim_whole_bundle_acceptance(self):
+    def test_license_fallback_does_not_claim_whole_bundle_acceptance(self):
         content = (ROOT / 'docs/products.html').read_text(encoding='utf-8')
-        for phrase in ('Adapter repair verified', 'keeps the total and completeness unknown',
-                       'latest license query returned HTTP 404',
+        for phrase in ('License-only fallback', 'keeps the total and completeness unknown',
+                       "does not repair the provider's HTTP 404", '3 provider points per call',
+                       'screening-license-fallback-20261013-v1', 'at most two QCC calls',
                        'neither updated contract has had a funded end-to-end purchase',
                        'whole bundle is not settled', '上游实际扣费尚未核实'):
             self.assertIn(phrase, content)
@@ -78,7 +79,7 @@ class ProductCopyTests(unittest.TestCase):
             "0.59 USDC",
             "exactly ONE QCC qualifications query",
             "not complete QCC coverage or independent cross-verification",
-            "Standard is 0.29 USDC for the ten Jinghai checks",
+            "Standard is 0.29 USDC for ten Jinghai-first check dimensions",
             "资质增强筛查为 0.59 USDC",
             "恰好一次企查查资质查询",
         ):

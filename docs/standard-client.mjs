@@ -23,12 +23,15 @@ const normalize = s => typeof s === 'string' ? s.replaceAll('（','(').replaceAl
 const digestShape = s => typeof s === 'string' && /^[a-f0-9]{64}$/.test(s);
 
 export function validateProduct(p) {
-  guard(p?.sku === SKU && p.version === 'screening-20261012-v1' && digestShape(p.contract), 'product_identity');
+  const fallback = p?.version === 'screening-license-fallback-20261013-v1';
+  guard(p?.sku === SKU && (fallback || p.version === 'screening-20261012-v1') && digestShape(p.contract), 'product_identity');
   guard(p.price_atomic === 290000 && p.price_usdc === '0.290000' && p.currency === 'USDC' && p.network === 'eip155:8453', 'product_price');
   guard(Array.isArray(p.checks) && equal(p.checks.map(c => c.tool), TOOLS) && p.checks.every(c => digestShape(c.contract)), 'product_checklist');
-  guard(p.max_jinghai_calls === 10 && p.max_jinghai_points === 10 && p.max_qcc_points === 0 && p.retention_hours === 24, 'product_limits');
+  guard(p.max_jinghai_calls === 10 && p.max_jinghai_points === 10 && p.max_qcc_points === (fallback ? 3 : 0) && p.retention_hours === 24, 'product_limits');
   guard(equal(p.formats, ['json','zh-CN','en']) && p.recovery_token_required === true, 'product_delivery');
-  for (const key of ['automatic_retry','automatic_paging','partial_report_charged','complete_due_diligence','qcc_automatic_fallback','human_review_included']) guard(p[key] === false, 'product_boundary');
+  for (const key of ['automatic_retry','automatic_paging','partial_report_charged','complete_due_diligence','human_review_included']) guard(p[key] === false, 'product_boundary');
+  guard(p.qcc_automatic_fallback === fallback, 'product_fallback');
+  if (fallback) guard(equal(p.fallback_checks, [{primary_tool:'v3_license_list',provider:'qcc',server:'operation',tool:'get_administrative_license',points:3,max_records:100,trigger:'primary_transport_failure_or_open_circuit',max_attempts:1,result_profile:'qcc_administrative_license_normalized_v1',coverage:'partial_records_completeness_unestablished'}]), 'product_fallback_scope');
   return p;
 }
 
@@ -46,7 +49,20 @@ export function validateReport(r, p, company) {
   validateProduct(p);
   guard(r?.schema_version === 'cn-evidence-screening-product/1' && r.sku === SKU && r.contract === p.contract && r.price_usdc === '0.290000', 'report_product');
   guard(digestShape(r.request_id) && equal(r.checklist, TOOLS) && r.data?.length === 10, 'report_checklist');
-  guard(r.usage?.upstream_attempts === 10 && r.usage?.qcc_calls === 0, 'report_usage');
+  const failed = r.data[5]?.response?.failure;
+  const fallback = p.qcc_automatic_fallback && ['primary_transport_failed_or_uncertain','primary_circuit_open_not_dispatched'].includes(failed);
+  const jhCalls = failed === 'primary_circuit_open_not_dispatched' ? 9 : 10;
+  guard(r.usage?.upstream_attempts === jhCalls+(fallback ? 1 : 0) && r.usage?.qcc_calls === (fallback ? 1 : 0), 'report_usage');
+  if (fallback) {
+    const s=r.qcc_data?.[0], fields=['决定文书/许可编号','决定文书/许可证名称','许可状态','有效期自','有效期至','许可机关'];
+    guard(r.qcc_data?.length===1 && equal(r.analysis.provider_supplements,r.qcc_data) && s.provider==='qcc' && s.tool==='get_administrative_license' && s.server==='operation' && s.topic==='licenses', 'fallback_source');
+    guard(s.state==='records_returned' && s.freshness==='within_window' && ['legal_name_matched','legal_name_and_returned_uscc'].includes(s.identity_binding) && equal(s.subject,r.analysis.subject), 'fallback_identity');
+    guard(digestShape(s.input_sha256) && s.id==='QCC-'+s.input_sha256.slice(0,20) && s.primary_gaps_closed===false && s.independent_corroboration===false && s.safety_conclusion===null, 'fallback_evidence');
+    guard(s.coverage==='partial_records_completeness_unestablished' && Array.isArray(s.observations?.records) && s.observations.records.length>=1 && s.observations.records.length<=100 && s.returned_count===s.observations.records.length, 'fallback_records');
+    guard(s.vendor_total_claim===null || Number.isInteger(s.vendor_total_claim) && s.vendor_total_claim>=s.returned_count, 'fallback_total');
+    guard(s.observations.records.every(row=>Object.keys(row).every(k=>fields.includes(k) && typeof row[k]==='string' && row[k].length<=400) && ['决定文书/许可编号','决定文书/许可证名称','许可机关'].every(k=>row[k])), 'fallback_fields');
+    guard(equal(r.coverage.fallback_checks,[{primary_tool:'v3_license_list',provider:'qcc',tool:'operation/get_administrative_license',source_id:s.id,scope:'partial_records_completeness_unestablished'}]) && r.usage.reserved_qcc_points===3 && r.usage.jinghai_calls===jhCalls, 'fallback_accounting');
+  } else guard(!failed && !r.qcc_data?.length && !r.analysis.provider_supplements?.length, 'unexpected_fallback');
   guard(normalize(r.analysis?.subject?.legal_name_cn) === normalize(company) && normalize(company), 'report_subject');
   guard(r.coverage?.all_contracted_checks_returned === true && r.coverage?.complete_due_diligence === false, 'report_coverage');
   guard(typeof r.analysis?.decision?.status === 'string' && r.analysis.decision.status !== 'identity_blocked', 'report_decision');
@@ -55,6 +71,10 @@ export function validateReport(r, p, company) {
     const entry = r.data[i], reply = entry.response, plan = p.checks[i];
     guard(reply?.tool === plan.tool && reply.contract === plan.contract, 'report_tool_contract');
     guard(reply.request_id === hash(canonical({parent:r.request_id,sku:SKU,contract:p.contract,tool:plan.tool})), 'report_child_operation');
+    if (i===5 && fallback) {
+      guard(equal(entry.arguments,{company_id:identity.id}) && equal(reply.result,{isError:true,content:[]}) && reply.usage?.upstream_attempts===jhCalls-9, 'fallback_primary_failure');
+      continue;
+    }
     const raw = reply.result, copies = [];
     guard(raw && typeof raw === 'object' && (raw.isError === undefined || raw.isError === false), 'report_business_error');
     if (raw.structuredContent !== undefined) copies.push(raw.structuredContent);
@@ -74,7 +94,7 @@ export function validateReport(r, p, company) {
   }
   const sources = r.analysis.sources;
   guard(Array.isArray(sources) && sources.length === 10 && TOOLS.every(tool => sources.filter(s => s.module === tool).length === 1), 'report_sources');
-  guard(sources.every(s => ['ok','no_records'].includes(s.state) && ['matched','request_bound'].includes(s.identity_binding)), 'report_source_state');
+  guard(sources.every(s => fallback && s.module==='v3_license_list' ? s.state==='unavailable' : ['ok','no_records'].includes(s.state) && ['matched','request_bound'].includes(s.identity_binding)), 'report_source_state');
   return r;
 }
 
@@ -92,7 +112,7 @@ function headers(internal) { return {'Accept':'application/json','Content-Type':
 function request(fetchImpl, url, h, body, timeout = 30000) { return fetchImpl(url,{method:body === undefined ? 'GET':'POST',redirect:'error',headers:h,...(body === undefined ? {} : {body:JSON.stringify(body)}),signal:AbortSignal.timeout(timeout)}); }
 function checkCompany(name) { guard(typeof name === 'string' && name === name.trim() && name.length >= 2 && name.length <= 200 && /[\u3400-\u9fff]/u.test(name) && !/[\u0000-\u001f\u007f]/u.test(name), 'exact_chinese_name_required'); }
 function checkPaths(state, out) { guard(state && out && ![state,state+'.attempt.json',state+'.receipt.json'].some(p => resolve(p) === resolve(out)), 'private_paths'); }
-const help = `Standard-only example. Node 20+. No QCC or other product purchases.
+const help = `Standard-only example. Node 20+. Includes the quoted license-only QCC fallback; no other product purchases.
   node standard-client.mjs preview --company "EXACT CHINESE LEGAL NAME" [--internal-test]
   node standard-client.mjs buy --company "EXACT CHINESE LEGAL NAME" --approve-contract HASH_FROM_PREVIEW --max-usdc 0.29 --state NEW_PRIVATE_FILE --out NEW_REPORT_JSON [--internal-test]
   node standard-client.mjs recover --state PRIVATE_FILE --out NEW_FILE [--format json|en|zh-CN] [--internal-test]
@@ -163,7 +183,7 @@ export async function run(args, {fetchImpl=globalThis.fetch,sign=defaultSign,wri
   const quote=validateQuote(await json(unpaid)),encoded=unpaid.headers.get('payment-required');
   guard(encoded && encoded.length < 20000,'quote_header'); const headerQuote=validateQuote(JSON.parse(Buffer.from(encoded,'base64').toString('utf8')));
   guard(equal(headerQuote.accepts,quote.accepts),'conflicting_quote');
-  if(command === 'preview') { write(JSON.stringify({preview:true,sku:SKU,contract:p.contract,price_usdc:'0.29',checks:10,qcc_calls:0,payment_submitted:false,delivery_guaranteed:false})); return; }
+  if(command === 'preview') { write(JSON.stringify({preview:true,sku:SKU,contract:p.contract,price_usdc:'0.29',checks:10,qcc_calls:0,max_qcc_fallback_calls:p.qcc_automatic_fallback ? 1 : 0,payment_submitted:false,delivery_guaranteed:false})); return; }
   const state=opt['--state'],out=opt['--out'],token=randomBytes(32).toString('hex');
   // Exclusive reservation before wallet access/signing. Never reuse/delete it to retry.
   await save(state,{version:1,sku:SKU,url:ENDPOINT,product:p,company_name:company,recovery_token:token,intent:'one_attempt_reserved'});

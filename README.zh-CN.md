@@ -4,7 +4,7 @@
 
 **渠道验证：**[PayAPI Market 企业详情条目](https://payapi.market/api/cn-evidence-company-detail)已上架。2026-10-11，平台自行出资完成一次0.011 USDC验证；交易与我方结算、响应发送记录匹配，平台来信确认收到有效企业详情JSON。这只验证该单一路径，不是自然客户需求，也不代表新报告产品或全部工具通过验收。
 
-**企业筛查报告：**[产品与价格](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [实时产品目录](https://api.cnevidence.com/free/cn/products)。标准版 `screening-standard-v1` 价格0.29 USDC，包含10项鲸海检查，交付JSON及中、英文HTML报告。增强版 `screening-enhanced-v1` 价格0.59 USDC，包含同样10项鲸海检查，并恰好增加1项企查查资质查询。单独的企查查资质产品 `qcc-qualifications-v1` 价格0.03 USDC，仅返回规范JSON、最多30条记录，不含报告分析。以上新产品仅支持HTTP x402，不是新增MCP工具；购买前查看实时目录状态。交付依赖服务商余额和运行可用性；没有人工日额度或总商用额度限制，但不代表免除单笔限制或保证交付。
+**企业筛查报告：**[产品与价格](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [实时产品目录](https://api.cnevidence.com/free/cn/products)。标准版 `screening-standard-v1` 价格0.29 USDC，覆盖10个固定维度，优先查询鲸海，交付JSON及中、英文HTML报告。仅当行政许可工具 `v3_license_list` 连接/调用失败或该工具已熔断时，才调用一次企查查 `get_administrative_license` 兜底（3积分、最多100条，不翻页、不重试）；增强版 `screening-enhanced-v1` 价格0.59 USDC，在标准版外始终另查一次企查查资质（最多30条），因此企查查调用最多两次。许可回退会保留鲸海失败来源和企查查来源，但只是有限证据，不声称记录完整；其他检查不切换来源，也不是对全部64个工具的兜底。其他检查失败或两家服务商均失败时不结算。单独企查查资质产品 `qcc-qualifications-v1` 价格0.03 USDC，仅返回规范JSON、最多30条记录，不含报告分析。以上新产品仅支持HTTP x402，不是新增MCP工具；购买前查看实时目录状态。交付依赖服务商余额和运行可用性；没有人工日额度或总商用额度限制，但不代表免除单笔限制或保证交付。历史实付验收针对旧版合约，不代表当前合约已实付验收。具体条件及当前验收状态见[产品说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html)。
 
 **当前 V3 单项工具目录：**已部署64个独立数据工具。MCP `tools/list` 当前共返回68项（64个数据工具、3个旧工具和1个Schema说明工具）。已启用工具与参数以[实时目录](https://api.cnevidence.com/free/cn/tools)为准，调用方式见[V3接入说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html)。每次新V3工具调用0.011 USDC。2026-10-10已用自有钱包完成一次HTTP企业详情的付款、结算、交付和免费找回验收；这不是客户成交，也不代表64项全部完成付费验收或V3原生MCP支付验收。交付依赖服务商余额和运行可用性。
 
