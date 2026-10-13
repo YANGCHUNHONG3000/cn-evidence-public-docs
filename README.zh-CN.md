@@ -1,6 +1,8 @@
-# CN Evidence — China supplier information API
+# CN Evidence — 中国企业数据与筛查报告
 
-**当前 V3 单项工具目录：**已部署64个独立数据工具。MCP `tools/list` 当前共返回68项（64个数据工具、3个旧工具和1个Schema说明工具）。已启用工具与参数以[实时目录](https://api.cnevidence.com/free/cn/tools)为准，调用方式见[V3接入说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html)。每次新V3工具调用0.011 USDC。2026-10-10已用自有钱包完成一次HTTP企业详情的付款、结算、交付和免费找回验收；这不是客户成交，也不代表64项全部完成付费验收或V3原生MCP支付验收。当前仍是受预算与可用性限制的小范围开放。
+**企业筛查报告：**[产品与价格](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [实时产品目录](https://api.cnevidence.com/free/cn/products)。标准版 `screening-standard-v1` 价格0.29 USDC，包含10项鲸海检查，交付JSON及中、英文HTML报告。增强版 `screening-enhanced-v1` 价格0.59 USDC，包含同样10项鲸海检查，并恰好增加1项企查查资质查询。单独的企查查资质产品 `qcc-qualifications-v1` 价格0.03 USDC，仅返回规范JSON、最多30条记录，不含报告分析。以上新产品仅支持HTTP x402，不是新增MCP工具；购买前查看实时目录状态。交付依赖服务商余额和运行可用性；没有人工日额度或总商用额度限制，但不代表免除单笔限制或保证交付。
+
+**当前 V3 单项工具目录：**已部署64个独立数据工具。MCP `tools/list` 当前共返回68项（64个数据工具、3个旧工具和1个Schema说明工具）。已启用工具与参数以[实时目录](https://api.cnevidence.com/free/cn/tools)为准，调用方式见[V3接入说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html)。每次新V3工具调用0.011 USDC。2026-10-10已用自有钱包完成一次HTTP企业详情的付款、结算、交付和免费找回验收；这不是客户成交，也不代表64项全部完成付费验收或V3原生MCP支付验收。交付依赖服务商余额和运行可用性。
 
 **失败兜底：**不自动重扣、不自动重试上游业务查询；连续失败暂时停用受影响工具。付款前须保存并发送独立找回密钥，丢失响应后免费查单/找回；支付状态不明先对账。报告找回窗口为24小时，退款审核不等于已退款或保证退款。[查看具体处理方式](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html#failure-recovery)。
 
@@ -16,8 +18,8 @@ CN Evidence provides structured Chinese company information for supplier verific
 
 | Package | USDC per successful report | Included modules |
 | --- | --- | --- |
-| Basic | 0.032 | Registration, operating abnormalities, administrative penalties |
-| Full | 0.093 | Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications, customs |
+| Legacy Basic | 0.032 | Registration, operating abnormalities, administrative penalties |
+| Legacy Full | 0.093 | Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications, customs |
 
 One interface can return many fields and records: Full means nine modules, not nine fields. Each list is limited to its first page, up to ten records. Serious violations, enforcement and dishonesty use the current-status option. No automatic historical queries, pagination or retries.
 

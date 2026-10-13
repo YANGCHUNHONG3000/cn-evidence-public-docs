@@ -1,6 +1,8 @@
-# CN Evidence — China supplier information API
+# CN Evidence — China company data and screening reports
 
-**Current V3 single-tool catalog:** 64 individual data tools are deployed. MCP `tools/list` currently returns 68 tools total (64 data tools, 3 older tools and one schema helper). The live catalog is authoritative for enabled tools and schemas: https://api.cnevidence.com/free/cn/tools. See the [V3 call guide](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html). New V3 calls cost 0.011 USDC per tool call. On 2026-10-10, one owner-funded HTTP `v3_company_detail` purchase passed payment, settlement, delivery and free recovery checks. This is not a customer sale or paid acceptance of all 64 tools or the V3 MCP transport. Rollout remains limited by upstream budget and availability gates.
+**Screening reports:** [Products and pricing](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [Live product catalog](https://api.cnevidence.com/free/cn/products). Standard `screening-standard-v1` costs 0.29 USDC and returns ten Jinghai checks as JSON plus Chinese and English HTML reports. Enhanced `screening-enhanced-v1` costs 0.59 USDC and returns the same ten Jinghai checks plus exactly one QCC qualification lookup. QCC `qcc-qualifications-v1` costs 0.03 USDC and returns only the canonical JSON response, up to 30 records, without report analysis. These products are HTTP x402 only; they are not new MCP tools. Check live catalog availability before purchase. Delivery depends on provider balance and runtime availability; there is no manual daily or total commercial quota, but this is not a per-order limit waiver or delivery guarantee.
+
+**Current V3 single-tool catalog:** 64 individual data tools are deployed. MCP `tools/list` currently returns 68 tools total (64 data tools, 3 older tools and one schema helper). The live catalog is authoritative for enabled tools and schemas: https://api.cnevidence.com/free/cn/tools. See the [V3 call guide](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html). New V3 calls cost 0.011 USDC per tool call. On 2026-10-10, one owner-funded HTTP `v3_company_detail` purchase passed payment, settlement, delivery and free recovery checks. This is not a customer sale or paid acceptance of all 64 tools or the V3 MCP transport. Delivery depends on provider balance and runtime availability.
 
 **Failure handling:** no automatic repayment or upstream business retry. Repeated failures temporarily pause the affected tool. Save a unique recovery token before purchase; use free order lookup and report recovery after a lost response. Unknown payment status requires reconciliation. Reports have a 24-hour recovery window; refund review is not a completed or guaranteed refund. [Failure and recovery details](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html#failure-recovery).
 
@@ -16,8 +18,8 @@ The prices and module counts below describe only the retained legacy Basic/Full 
 
 | Package | USDC per successful report | Included modules |
 | --- | --- | --- |
-| Basic | 0.032 | Registration, operating abnormalities, administrative penalties |
-| Full | 0.093 | Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications, customs |
+| Legacy Basic | 0.032 | Registration, operating abnormalities, administrative penalties |
+| Legacy Full | 0.093 | Basic plus serious violations, enforcement, dishonesty, bankruptcy, qualifications, customs |
 
 One interface can return many fields and records: Full means nine modules, not nine fields. Each list is limited to its first page, up to ten records. Serious violations, enforcement and dishonesty use the current-status option. No automatic historical queries, pagination or retries.
 
