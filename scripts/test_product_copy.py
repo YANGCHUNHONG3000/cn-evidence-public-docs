@@ -63,6 +63,35 @@ class ProductCopyTests(unittest.TestCase):
                 for phrase in OLD_UNAVAILABLE:
                     self.assertNotIn(phrase.lower(), content)
 
+    def test_enhanced_product_name_and_bounded_qcc_scope_are_clear(self):
+        content = (ROOT / "docs/products.html").read_text(encoding="utf-8")
+        for required in (
+            "Qualifications-enhanced screening / 资质增强筛查",
+            "0.59 USDC",
+            "exactly ONE QCC qualifications query",
+            "not complete QCC coverage or independent cross-verification",
+            "Standard is 0.29 USDC for the ten Jinghai checks",
+            "资质增强筛查为 0.59 USDC",
+            "恰好一次企查查资质查询",
+        ):
+            with self.subTest(phrase=required):
+                self.assertIn(required, content)
+
+    def test_recovery_support_contact_requests_only_safe_diagnostics(self):
+        content = (ROOT / "docs/products.html").read_text(encoding="utf-8")
+        for required in (
+            "original report can be recovered for 24 hours",
+            "check or recover the original order",
+            "mailto:contact@cnevidence.com",
+            "order ID, occurrence time and error code",
+            "Never send a payment signature, recovery token or private key",
+            "原报告可在 24 小时内恢复",
+            "仅提供订单 ID、发生时间和错误代码",
+            "请勿发送付款签名、恢复口令或私钥",
+        ):
+            with self.subTest(phrase=required):
+                self.assertIn(required, content)
+
 
 if __name__ == "__main__":
     unittest.main()

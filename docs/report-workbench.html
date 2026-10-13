@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>CN Evidence — Report workbench / 报告工作台</title>
+<meta name="description" content="Prepare a supplier-screening pilot and read saved CN Evidence JSON locally. No wallet, upload or automatic purchase.">
+<link rel="stylesheet" href="report-workbench.css"><script type="module" src="report-workbench.mjs"></script></head>
+<body><main><nav><a href="./">CN Evidence</a><a href="products.html">Prices & scope / 价格范围</a><a href="integration-pilot.html">Developer guide / 接入指南</a></nav>
+<p class="eyebrow">SUPPLIER SCREENING · 供应商初筛</p><h1>A clearer first check.<br><span>报告工作台</span></h1>
+<p class="lead">Prepare one supplier question. Read the coverage of a saved report.<br>先确认一家企业与检查范围，再看清报告查到了什么、还缺什么。</p>
+<div class="notice">No wallet connection, payment or live company lookup on this page. Local files stay in this tab; no analytics or upload.<br>本页不连接钱包、不付款、不实查企业。导入文件仅在当前页面处理，不上传、不跟踪。</div>
+<noscript><p class="notice">Enable JavaScript for local preparation and viewing. You can still use the sample and support links. / 本地表单和查看器需要 JavaScript；样张与支持链接仍可使用。</p></noscript>
+<section aria-labelledby="prepare-title"><p class="eyebrow">01 / PREPARE · 准备试点</p><h2 id="prepare-title">Choose a scope / 选择检查范围</h2>
+<form id="brief-form" autocomplete="off"><label>Chinese registered company name / 企业中文登记全称<input id="company" required maxlength="200" placeholder="填写准确的中文登记全称"></label>
+<p class="hint">Only have an English brand name? Ask the supplier for its Chinese legal name and registration code first. We do not guess or silently match companies.<br>只有英文品牌名时，请先向供应商确认中文登记全称与统一社会信用代码，不自动猜测匹配。</p>
+<label>USCC / 统一社会信用代码<input id="uscc" maxlength="18" pattern="[0-9A-Z]{18}" placeholder="QCC单项必填；其他套餐可留空"></label><p class="hint">Required for QCC-only; optional for screening packages. This page checks input format, not registration identity. / 企查查单项必填，报告套餐可留空。本页只检查输入格式，不核验登记身份。</p>
+<div class="columns"><label>Product / 产品<select id="sku"><option value="screening-standard-v1">Standard / 标准筛查 — 0.29 USDC</option><option value="screening-enhanced-v1">Qualifications-enhanced / 资质增强 — 0.59 USDC</option><option value="qcc-qualifications-v1">QCC qualifications JSON / 资质单项 — 0.03 USDC</option></select></label>
+<label>Output / 输出<select id="format"><option value="en">English HTML</option><option value="zh-CN">中文 HTML</option><option value="json">JSON</option></select></label></div>
+<p id="scope" class="scope"></p><label>Purpose / 用途<select id="purpose"><option value="supplier_onboarding">Supplier onboarding / 供应商准入初筛</option><option value="qualification_review">Qualification review / 资质复核</option><option value="integration_evaluation">Software integration / 软件接入评估</option></select></label>
+<p class="hint">These are published prices, not a live availability guarantee. <a href="https://api.cnevidence.com/free/cn/products" target="_blank" rel="noopener noreferrer">Read live catalog / 查看实时目录</a>. Only x402/Base USDC is implemented; this page is not a checkout.</p>
+<button type="submit">Prepare scope — no payment / 生成需求单，不付款</button><p id="brief-status" role="status"></p></form>
+<div id="brief-result" hidden><pre id="brief-text"></pre><button type="button" id="download-brief">Download brief / 下载需求单</button><p>Review it before sharing with <a href="mailto:contact@cnevidence.com">contact@cnevidence.com</a>. No email is sent by this page. / 核对后自行分享，本页不发信。请勿发送证件、合同、密钥或恢复口令。</p></div></section>
+<section aria-labelledby="view-title"><p class="eyebrow">02 / READ · 查看已保存报告</p><h2 id="view-title">See what is covered / 看清覆盖边界</h2>
+<p><a href="standard-report-example.html">English sample</a> · <a href="standard-report-example-zh.html">中文样张</a> · <a href="standard-report-example.json" download>Download redacted sample JSON / 下载脱敏样张</a></p>
+<label>Open a saved report JSON / 打开已保存的报告 JSON<input id="report-file" type="file" accept=".json,application/json"></label><p class="hint">Maximum 2.1 MB. Do not select wallet, receipt, recovery-state or credential files. / 最大2.1 MB，请勿选择钱包、回执、恢复状态或密钥文件。</p><button type="button" id="clear-report">Clear local report / 清除当前报告</button><p id="report-status" role="status"></p>
+<div id="report-result" hidden><div class="notice">Local presentation only: not a new query, payment check, authenticity check or supplier approval. Imported files can be edited. / 仅本地展示，不实查、不验证付款或文件真实性，不构成供应商准入结论。</div>
+<h3 id="subject"></h3><p id="report-meta"></p><p id="decision" class="scope"></p><div class="table-wrap"><table><thead><tr><th>Check / 检查</th><th>Returned / 返回</th><th>Provider total / 上游声称总数</th><th>Not retrieved* / 未取*</th><th>Coverage / 覆盖</th></tr></thead><tbody id="coverage"></tbody></table></div>
+<p class="hint">*Only a difference between counts in the same observation; not an independently verified count. Unknown stays unknown. Equal counts do not prove completeness. Zero records does not mean no risk. Never add rows into unique cases.<br>*仅同次观测的数量差，不是独立核实的记录数。未知不当零，数量相等不代表齐全，空结果不代表无风险，各项不可相加为独立案件。</p>
+<h3>Next review actions / 后续复核事项</h3><ul id="actions"></ul><h3>Limitations / 限制</h3><ul id="limitations"></ul></div></section>
+<section><p class="eyebrow">03 / RECOVER · 原订单与售后</p><h2>Payment uncertain? Keep the original order.<br>付款结果不明？先查原订单。</h2>
+<p>Do not buy again automatically. Original-order recovery is free for 24 hours and does not call providers again. Save delivered reports privately; online recovery is not permanent storage. / 不要自动重付。原订单24小时内可免费恢复、不追加上游查询；请私下保存交付文件，在线恢复不是永久存储。</p>
+<p>This page deliberately has no recovery-token field. Use the <a href="integration-pilot.html#standard-client">guarded Standard recovery client</a> or <a href="buyer-guide.html">recovery guide</a>. QCC single supports JSON only. / 本页不收恢复口令；请用原订单恢复工具，企查查单项只提供 JSON。</p>
+<p><a href="mailto:contact@cnevidence.com?subject=CN%20Evidence%20order%20support">Order support / 订单支持</a>: share only order ID, occurrence time and error code. Never send payment signatures, recovery tokens or private keys. / 仅提供订单ID、发生时间和错误代码，请勿发送付款签名、恢复口令或私钥。</p></section>
+<footer>Bounded evidence, not complete due diligence. / 有限证据初筛，不是完整尽调。<br>Published prices: 0.29 / 0.59 / 0.03 USDC; the current API contract controls purchases.</footer></main></body></html>
