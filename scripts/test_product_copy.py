@@ -22,6 +22,14 @@ OLD_UNAVAILABLE = (
 
 
 class ProductCopyTests(unittest.TestCase):
+    def test_optional_total_repair_does_not_claim_whole_bundle_acceptance(self):
+        content = (ROOT / 'docs/products.html').read_text(encoding='utf-8')
+        for phrase in ('Adapter repair verified', 'keeps the total and completeness unknown',
+                       'latest license query returned HTTP 404',
+                       'neither updated contract has had a funded end-to-end purchase',
+                       'whole bundle is not settled', '上游实际扣费尚未核实'):
+            self.assertIn(phrase, content)
+
     def test_paid_qcc_version_and_pilot_rules_are_not_conflated(self):
         content = (ROOT / 'docs/products.html').read_text(encoding='utf-8')
         for required in ('qcc-products-20261012-v1', 'qcc-products-20261012-v2',
