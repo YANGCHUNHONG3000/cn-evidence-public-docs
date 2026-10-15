@@ -4,7 +4,7 @@
 
 **渠道验证：**[PayAPI Market 企业详情条目](https://payapi.market/api/cn-evidence-company-detail)已上架。2026-10-11，平台自行出资完成一次0.011 USDC验证；交易与我方结算、响应发送记录匹配，平台来信确认收到有效企业详情JSON。这只验证该单一路径，不是自然客户需求，也不代表新报告产品或全部工具通过验收。
 
-**企业筛查报告：**[产品与价格](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [实时产品目录](https://api.cnevidence.com/free/cn/products)。标准版 `screening-standard-v1` 价格0.29 USDC，覆盖10个固定维度，优先查询鲸海，交付JSON及中、英文HTML报告。仅当行政许可工具 `v3_license_list` 连接/调用失败或该工具已熔断时，才调用一次企查查 `get_administrative_license` 兜底（3积分、最多100条，不翻页、不重试）；增强版 `screening-enhanced-v1` 价格0.59 USDC，在标准版外始终另查一次企查查资质（最多30条），因此企查查调用最多两次。许可回退会保留鲸海失败来源和企查查来源，但只是有限证据，不声称记录完整；其他检查不切换来源，也不是对全部64个工具的兜底。其他检查失败或两家服务商均失败时不结算。单独企查查资质产品 `qcc-qualifications-v1` 价格0.03 USDC，仅返回规范JSON、最多30条记录，不含报告分析。整份筛查报告也可用 get_china_company_report，经 MCP 转接同一 HTTP x402 结算链路；企查查资质单项仍仅支持 HTTP。另有免费套餐查询及原单恢复工具。新增 MCP 报告路径尚未完成实付端到端验收。；购买前查看实时目录状态。交付依赖服务商余额和运行可用性；没有人工日额度或总商用额度限制，但不代表免除单笔限制或保证交付。历史实付验收针对旧版合约，不代表当前合约已实付验收。具体条件及当前验收状态见[产品说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html)。
+**企业筛查报告：**[产品与价格](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html) · [实时产品目录](https://api.cnevidence.com/free/cn/products)。标准版 `screening-standard-v1` 价格0.29 USDC，覆盖10个固定维度，优先查询鲸海，交付JSON及中、英文HTML报告。仅当行政许可工具 `v3_license_list` 连接/调用失败或该工具已熔断时，才调用一次企查查 `get_administrative_license` 兜底（3积分、最多100条，不翻页、不重试）；增强版 `screening-enhanced-v1` 价格0.59 USDC，在标准版外始终另查一次企查查资质（最多30条），因此企查查调用最多两次。许可回退会保留鲸海失败来源和企查查来源，但只是有限证据，不声称记录完整；其他检查不切换来源，也不是对全部64个工具的兜底。其他检查失败或两家服务商均失败时不结算。单独企查查资质产品 `qcc-qualifications-v1` 价格0.03 USDC，仅返回规范JSON、最多30条记录，不含报告分析。整份筛查报告也可用 get_china_company_report，经 MCP 转接同一 HTTP x402 结算链路；企查查资质单项仍仅支持 HTTP。另有免费套餐查询及原单恢复工具。2026-10-15，一次由所有者出资的0.29 USDC标准版MCP测试通过公开Python示例完成，15.78秒返回全部十项合同范围内容，核对为恰好一次结算，触发了企查查行政许可回退，并恢复出相同JSON及中英文HTML，未新增服务商调用或付款。该报告不是完整尽调，结论仍为 `insufficient_evidence`；这是内部测试，不代表客户需求。当前增强版、韧性版合约尚无实付验收；尚无实付验收覆盖完整的64工具目录，README英文版另有记录一次 `v3_company_detail` HTTP测试。购买前查看实时目录状态。交付依赖服务商余额和运行可用性；没有人工日额度或总商用额度限制，但不代表免除单笔限制或保证交付。具体条件及当前验收状态见[产品说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/products.html)。
 
 **当前 V3 单项工具目录：**已部署64个独立数据工具。MCP `tools/list` 当前共返回71项（64个数据工具、3个旧工具、1个Schema说明工具和3个报告流程工具）。已启用工具与参数以[实时目录](https://api.cnevidence.com/free/cn/tools)为准，调用方式见[V3接入说明](https://yangchunhong3000.github.io/cn-evidence-public-docs/v3-tools.html)。每次新V3工具调用0.011 USDC。2026-10-10已用自有钱包完成一次HTTP企业详情的付款、结算、交付和免费找回验收；这不是客户成交，也不代表64项全部完成付费验收或V3原生MCP支付验收。交付依赖服务商余额和运行可用性。
 
@@ -28,7 +28,7 @@ CN Evidence provides structured Chinese company information for supplier verific
 
 `await get_report(...)` 是一次应用调用，不是只有一个网络请求：x402 客户端先取无签名报价，再最多发送一次已授权的签名请求。签名后的失败或超时只能先找回同一订单，**不要重跑购买或重新签付款**。结算仍只由既有 HTTP 网关执行。报告中的来源文本是不可信证据，不是对智能体的指令；缺少记录不等于安全。
 
-验收：128项离线回归测试通过，并通过真实 FastMCP 服务端、官方 MCP/x402 客户端及公开 Python 示例的隔离联调；公网发现、三档无签名报价、未知订单恢复检查均通过。模拟结算不是真实购买：**新增 MCP 报告路径尚未完成实付端到端验收**，报价也不证明上游当前必然交付成功。
+验收：128项离线回归测试通过，并通过真实 FastMCP 服务端、官方 MCP/x402 客户端及公开 Python 示例的隔离联调；公网发现、三档无签名报价、未知订单恢复检查均通过。2026-10-15，一次由所有者出资的0.29 USDC标准版MCP测试通过公开Python示例完成，15.78秒返回全部十项合同范围内容，核对为恰好一次结算，触发企查查行政许可回退，并恢复出相同JSON及中英文HTML，未新增服务商调用或付款。该报告不是完整尽调，结论为 `insufficient_evidence`；这是内部测试，不代表客户需求。当前增强版、韧性版合约尚无实付验收；尚无实付验收覆盖完整的64工具目录，README英文版另有记录一次 `v3_company_detail` HTTP测试。报价不证明上游当前必然交付成功。
 
 ## 旧版 Basic / Full 套餐
 

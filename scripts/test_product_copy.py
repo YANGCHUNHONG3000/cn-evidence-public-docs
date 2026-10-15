@@ -27,7 +27,8 @@ class ProductCopyTests(unittest.TestCase):
         for phrase in ('License-only fallback', 'keeps the total and completeness unknown',
                        "does not repair the provider's HTTP 404", '3 provider points per call',
                        'screening-license-fallback-20261013-v1', 'at most two QCC calls',
-                       'neither updated contract has had a funded end-to-end purchase',
+                       'As of 2026-10-13, the updated contracts had not had a funded end-to-end purchase',
+                       'On 2026-10-15, one owner-funded 0.29 USDC Standard MCP test',
                        'whole bundle is not settled', '上游实际扣费尚未核实'):
             self.assertIn(phrase, content)
 
@@ -75,7 +76,9 @@ class ProductCopyTests(unittest.TestCase):
                              'X-CN-Recovery-Token', '1.59', 'x402==2.22.0'):
                 self.assertIn(required, content)
         content = (ROOT / 'README.md').read_text(encoding='utf-8')
-        self.assertIn('has not had a funded end-to-end acceptance', content)
+        self.assertIn('one owner-funded 0.29 USDC Standard MCP test', content)
+        self.assertIn('No funded acceptance covers the complete 64-tool catalog', content)
+        self.assertIn('current Enhanced and Resilient contracts have no funded acceptance', content)
         self.assertIn('do not rerun the purchase or sign another payment', content)
         self.assertIn('never in tool arguments or model-visible prompts', content)
 
