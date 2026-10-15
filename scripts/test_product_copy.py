@@ -61,9 +61,23 @@ class ProductCopyTests(unittest.TestCase):
                 self.assertIn("screening-standard-v1", content)
                 self.assertIn("screening-enhanced-v1", content)
                 self.assertIn("qcc-qualifications-v1", content)
-                self.assertTrue(
-                    "not new mcp tools" in content or "不是新增mcp工具" in content
-                )
+                self.assertIn("get_china_company_report", content)
+                self.assertTrue("qcc-only qualifications remain http-only" in content
+                                or "企查查资质单项仍仅支持 http" in content)
+                self.assertNotIn("not new mcp tools", content)
+                self.assertNotIn("不是新增mcp工具", content)
+
+    def test_report_client_guide_preserves_payment_and_acceptance_boundaries(self):
+        for relative in ('README.md', 'README.zh-CN.md'):
+            content = (ROOT / relative).read_text(encoding='utf-8')
+            for required in ('get_china_report_options', 'get_china_company_report',
+                             'recover_china_company_report', 'examples/agent_report.py',
+                             'X-CN-Recovery-Token', '1.59', 'x402==2.22.0'):
+                self.assertIn(required, content)
+        content = (ROOT / 'README.md').read_text(encoding='utf-8')
+        self.assertIn('has not had a funded end-to-end acceptance', content)
+        self.assertIn('do not rerun the purchase or sign another payment', content)
+        self.assertIn('never in tool arguments or model-visible prompts', content)
 
     def test_no_stale_purchase_unavailable_assertions(self):
         for relative in ENTRYPOINTS + ("docs/products.html",):

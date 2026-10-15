@@ -46,10 +46,10 @@ class EntrypointCopyContracts(unittest.TestCase):
                 summary = chinese_summary(text)
                 self.assertTrue(summary, "中文摘要 section is missing")
                 self.assertIn("64", summary, "current V3 tool count is missing from summary")
-                self.assertIn("68", summary, "MCP tools/list count is missing from summary")
+                self.assertIn("71", summary, "MCP tools/list count is missing from summary")
                 self.assertRegex(summary, r"0\.011\s*USDC", "current V3 price is missing from summary")
-                self.assertRegex(summary, r"MCP.{0,100}68|68.{0,100}MCP",
-                                 "68 must be identified as the MCP catalog count")
+                self.assertRegex(summary, r"MCP.{0,100}71|71.{0,100}MCP",
+                                 "71 must be identified as the MCP catalog count")
                 self.assertRegex(summary, r"旧版.{0,60}Basic\s*/?\s*Full",
                                  "summary must explicitly label Basic/Full as legacy")
                 self.assertRegex(summary, r"企业详情.{0,60}并非全部工具的通用购买客户端",
